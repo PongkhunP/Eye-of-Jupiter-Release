@@ -1,0 +1,19 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Eye of Jupiter", "Eye of Jupiter.csproj", "{047B08C4-E49E-4FB4-A3A3-50CC2C99633F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{047B08C4-E49E-4FB4-A3A3-50CC2C99633F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{047B08C4-E49E-4FB4-A3A3-50CC2C99633F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{047B08C4-E49E-4FB4-A3A3-50CC2C99633F}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{047B08C4-E49E-4FB4-A3A3-50CC2C99633F}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{047B08C4-E49E-4FB4-A3A3-50CC2C99633F}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{047B08C4-E49E-4FB4-A3A3-50CC2C99633F}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal
