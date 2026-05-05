@@ -1,52 +1,51 @@
-[gd_scene load_steps=6 format=3 uid="uid://dcmmdsvh70wd3"]
+[gd_scene format=3 uid="uid://dcmmdsvh70wd3"]
 
-[ext_resource type="Script" path="res://Script/PlayerController.cs" id="1_player"]
+[ext_resource type="Script" uid="uid://dy0wdxrgiun3u" path="res://Script/PlayerController.cs" id="1_player"]
+[ext_resource type="Script" uid="uid://dx0h3gt485jhb" path="res://Script/PlayerStatManager.cs" id="2_ruc4y"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_a6ff3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_drqot"]
-size = Vector2(44, 42)
+size = Vector2(16, 16)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hz"]
-radius = 30.0
+radius = 24.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ix"]
-radius = 52.0
+radius = 16.0
 
-[node name="Main character" type="CharacterBody2D"]
-collision_layer = 1
+[node name="Main character" type="CharacterBody2D" unique_id=1315461981]
+collision_layer = 4
 collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_player")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1736454547]
 position = Vector2(38, 31)
+zoom = Vector2(3, 3)
 
-[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+[node name="MeshInstance2D" type="MeshInstance2D" parent="." unique_id=201933868]
 position = Vector2(38, 31.000004)
-scale = Vector2(44.24999, 42.000004)
+scale = Vector2(16.864, 16)
 mesh = SubResource("BoxMesh_a6ff3")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1427249551]
 position = Vector2(38, 31)
 shape = SubResource("RectangleShape2D_drqot")
 
-[node name="HazardDetector" type="Area2D" parent="."]
-collision_layer = 1
+[node name="HazardDetector" type="Area2D" parent="." unique_id=280650412]
 collision_mask = 2
-monitoring = true
-monitorable = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HazardDetector"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HazardDetector" unique_id=677743142]
 position = Vector2(38, 31)
 shape = SubResource("CircleShape2D_hz")
 
-[node name="InteractRange" type="Area2D" parent="."]
-collision_layer = 1
+[node name="InteractRange" type="Area2D" parent="." unique_id=158683060]
 collision_mask = 4
-monitoring = true
-monitorable = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractRange"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractRange" unique_id=1848775281]
 position = Vector2(38, 31)
 shape = SubResource("CircleShape2D_ix")
+
+[node name="Node" type="Node" parent="." unique_id=905621512]
+script = ExtResource("2_ruc4y")

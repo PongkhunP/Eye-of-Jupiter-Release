@@ -11,9 +11,12 @@ config_version=5
 [application]
 
 config/name="Eye of Jupiter"
-run/main_scene="uid://dcmmdsvh70wd3"
+run/main_scene="uid://c0fjlv2qxdyua"
 config/features=PackedStringArray("4.6", "C#", "Forward Plus")
 config/icon="res://icon.svg"
+run/size/viewport_height=1020
+run/size/viewport_width=1980
+run/size/mode=0
 
 [autoload]
 
@@ -22,8 +25,9 @@ DialogueManager="*res://Script/DialogueManager.cs"
 
 [display]
 
-window/size/viewport_width=1980
-window/size/viewport_height=1020
+window/size/viewport_width=1600
+window/size/viewport_height=720
+window/size/mode=1
 
 [dotnet]
 

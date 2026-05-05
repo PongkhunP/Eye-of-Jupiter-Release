@@ -1,9 +1,6 @@
 using Godot;
 using System.Collections.Generic;
 
-/// <summary>
-/// Autoload: Hermes / Poseidon (and more) dialogue lines; blocks player movement while active.
-/// </summary>
 public partial class DialogueManager : Node
 {
 	public const string DialogueUiScenePath = "res://UI/DialogueUI.tscn";
