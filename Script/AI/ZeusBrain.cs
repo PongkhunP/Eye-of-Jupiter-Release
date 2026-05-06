@@ -12,6 +12,9 @@ public partial class ZeusBrain : Node2D
 	[Export] public float BoltCooldownSeconds { get; set; } = 2.0f;
 	[Export] public float SmiteCooldownSeconds { get; set; } = 5.0f;
 	[Export] public float AreaDenialCooldownSeconds { get; set; } = 7.0f;
+	[Export] public bool ShowZapVfx { get; set; } = true;
+	[Export] public float ZapVfxDurationSeconds { get; set; } = 0.15f;
+	[Export] public float ZapVfxWidth { get; set; } = 4.0f;
 
 	private float _health;
 	private bool _dead;
@@ -26,6 +29,9 @@ public partial class ZeusBrain : Node2D
 	public override void _Ready()
 	{
 		_health = MaxHealth;
+		_boltCd = BoltCooldownSeconds;
+		_smiteCd = SmiteCooldownSeconds;
+		_denialCd = AreaDenialCooldownSeconds;
 		BuildTree();
 
 		if (PuzzleManager.Instance != null)
@@ -136,11 +142,16 @@ public partial class ZeusBrain : Node2D
 
 	private BTState CastSingleBolt(float damage)
 	{
-		PlayerController player = PlayerController.Instance;
+		PlayerController player = ResolvePlayer();
 		if (player == null)
 			return BTState.Failure;
 
-		player.TakeDamage(damage);
+		var stats = PlayerStatManager.Instance;
+		if (stats == null)
+			return BTState.Failure;
+
+		stats.TakeDamage(damage);
+		SpawnZapVfx(player.GlobalPosition);
 		_boltCd = BoltCooldownSeconds;
 		return BTState.Success;
 	}
@@ -153,11 +164,16 @@ public partial class ZeusBrain : Node2D
 
 	private BTState CastSmiteCombo()
 	{
-		PlayerController player = PlayerController.Instance;
+		PlayerController player = ResolvePlayer();
 		if (player == null)
 			return BTState.Failure;
 
-		player.TakeDamage(SmiteDamage);
+		var stats = PlayerStatManager.Instance;
+		if (stats == null)
+			return BTState.Failure;
+
+		stats.TakeDamage(SmiteDamage);
+		SpawnZapVfx(player.GlobalPosition);
 		SpawnStormHazardNear(player.GlobalPosition + new Vector2(60f, 0f), 70f, 10f, 8f, 3.5f);
 		SpawnStormHazardNear(player.GlobalPosition + new Vector2(-50f, 20f), 65f, 9f, 8f, 3.5f);
 		SpawnStormHazardNear(player.GlobalPosition + new Vector2(15f, -45f), 55f, 12f, 7f, 3.5f);
@@ -167,7 +183,7 @@ public partial class ZeusBrain : Node2D
 
 	private BTState SpawnAcidRainZone()
 	{
-		PlayerController player = PlayerController.Instance;
+		PlayerController player = ResolvePlayer();
 		if (player == null)
 			return BTState.Failure;
 
@@ -178,13 +194,31 @@ public partial class ZeusBrain : Node2D
 
 	private BTState RepositionSkyAnchor()
 	{
-		PlayerController player = PlayerController.Instance;
+		PlayerController player = ResolvePlayer();
 		if (player == null)
 			return BTState.Failure;
 
 		Vector2 target = player.GlobalPosition + new Vector2(0f, -180f);
 		GlobalPosition = GlobalPosition.Lerp(target, 0.04f);
 		return BTState.Running;
+	}
+
+	private PlayerController ResolvePlayer()
+	{
+		if (PlayerController.Instance != null)
+			return PlayerController.Instance;
+
+		var tree = GetTree();
+		if (tree == null)
+			return null;
+
+		foreach (var node in tree.GetNodesInGroup("player"))
+		{
+			if (node is PlayerController pc)
+				return pc;
+		}
+
+		return null;
 	}
 
 	private BTState Taunt()
@@ -231,6 +265,35 @@ public partial class ZeusBrain : Node2D
 		{
 			if (IsInstanceValid(hazard))
 				hazard.QueueFree();
+		};
+	}
+
+	private void SpawnZapVfx(Vector2 targetPosition)
+	{
+		if (!ShowZapVfx)
+			return;
+
+		var line = new Line2D();
+		line.TopLevel = true;
+		line.ZIndex = 200;
+		line.Width = ZapVfxWidth;
+		line.DefaultColor = new Color(0.95f, 0.95f, 0.2f, 0.95f);
+		line.AddPoint(GlobalPosition);
+		line.AddPoint(targetPosition);
+
+		GetTree().CurrentScene?.AddChild(line);
+
+		var timer = new Timer
+		{
+			OneShot = true,
+			WaitTime = ZapVfxDurationSeconds,
+			Autostart = true
+		};
+		line.AddChild(timer);
+		timer.Timeout += () =>
+		{
+			if (IsInstanceValid(line))
+				line.QueueFree();
 		};
 	}
 }

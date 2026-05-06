@@ -83,7 +83,7 @@ public partial class EnemyBrain : CharacterBody2D
 
 	private void UpdateBlackboard()
 	{
-		PlayerController player = PlayerController.Instance;
+		PlayerController player = ResolvePlayer();
 		if (player == null)
 		{
 			_blackboard.Set("can_see_player", false);
@@ -101,24 +101,46 @@ public partial class EnemyBrain : CharacterBody2D
 
 	private BTState AttackPlayer()
 	{
-		PlayerController player = PlayerController.Instance;
+		PlayerController player = ResolvePlayer();
 		if (player == null)
 			return BTState.Failure;
 
-		player.TakeDamage(AttackDamage);
+		var stats = PlayerStatManager.Instance;
+		if (stats == null)
+			return BTState.Failure;
+
+		stats.TakeDamage(AttackDamage);
 		_cooldownLeft = AttackCooldownSeconds;
 		return BTState.Success;
 	}
 
 	private BTState ChasePlayer(float delta)
 	{
-		PlayerController player = PlayerController.Instance;
+		PlayerController player = ResolvePlayer();
 		if (player == null)
 			return BTState.Failure;
 
 		Vector2 dir = (player.GlobalPosition - GlobalPosition).Normalized();
 		Velocity = dir * MoveSpeed;
 		return BTState.Running;
+	}
+
+	private PlayerController ResolvePlayer()
+	{
+		if (PlayerController.Instance != null)
+			return PlayerController.Instance;
+
+		var tree = GetTree();
+		if (tree == null)
+			return null;
+
+		foreach (var node in tree.GetNodesInGroup("player"))
+		{
+			if (node is PlayerController pc)
+				return pc;
+		}
+
+		return null;
 	}
 
 	private BTState MoveToLastKnown(float delta)
