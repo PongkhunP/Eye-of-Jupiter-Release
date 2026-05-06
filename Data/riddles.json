@@ -1,0 +1,29 @@
+{
+  "riddles": [
+    {
+      "id": "r01",
+      "question": "I have no legs yet I travel far, no mouth yet rivers fear my name. What am I?",
+      "answers": ["wind", "the wind"]
+    },
+    {
+      "id": "r02",
+      "question": "The more you take, the more you leave behind. What am I?",
+      "answers": ["footsteps", "steps"]
+    },
+    {
+      "id": "r03",
+      "question": "I speak without a mouth and hear without ears. I have no body but I come alive with the wind. What am I?",
+      "answers": ["echo", "an echo"]
+    },
+    {
+      "id": "r04",
+      "question": "I am always hungry, I must always be fed. The finger I touch will soon turn red. What am I?",
+      "answers": ["fire"]
+    },
+    {
+      "id": "r05",
+      "question": "What has roots as nobody sees, is taller than trees, up, up, up it goes, and yet never grows?",
+      "answers": ["mountain", "a mountain"]
+    }
+  ]
+}

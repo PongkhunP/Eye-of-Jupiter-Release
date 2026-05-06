@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://y30kxo3ai55e"]
+
+[ext_resource type="Script" uid="uid://bw1crmgfrlxd2" path="res://Script/AI/EnemyBrain.cs" id="1_uyfhp"]
+[ext_resource type="Texture2D" uid="uid://dlpcmyugl2y8u" path="res://Asset/Sprout Lands - Sprites - Basic pack/Characters/chicken.tres" id="2_ofmhs"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ofmhs"]
+radius = 12.509996
+
+[node name="EnemyAI" type="CharacterBody2D" unique_id=599401367]
+collision_layer = 2
+collision_mask = 7
+script = ExtResource("1_uyfhp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2030641834]
+position = Vector2(71.5, 72.5)
+shape = SubResource("CircleShape2D_ofmhs")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=959496347]
+texture_filter = 3
+position = Vector2(79.25, 66.75)
+scale = Vector2(5.46875, 5.7187505)
+texture = ExtResource("2_ofmhs")

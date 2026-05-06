@@ -1,0 +1,97 @@
+[gd_scene format=3 uid="uid://b6ojv22qmb30p"]
+
+[node name="MemoryPuzzle" type="Control" unique_id=515218658]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubmitButton" type="Button" parent="." unique_id=852128966]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -94.0
+offset_top = 148.0
+offset_right = 94.0
+offset_bottom = 194.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Submit"
+
+[node name="MemoryButtonGreen" type="Button" parent="." unique_id=2042843137]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -211.0
+offset_top = -240.0
+offset_right = -9.0
+offset_bottom = -108.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MemoryButtonYellow" type="Button" parent="." unique_id=710893220]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = -239.0
+offset_right = 205.0
+offset_bottom = -107.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MemoryButtonBlue" type="Button" parent="." unique_id=406150977]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -211.0
+offset_top = -96.0
+offset_right = -9.0
+offset_bottom = 36.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MemoryButtonRed" type="Button" parent="." unique_id=2044724571]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 3.0
+offset_top = -95.0
+offset_right = 205.0
+offset_bottom = 37.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="." unique_id=610322260]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -206.0
+offset_top = 70.0
+offset_right = 202.0
+offset_bottom = 103.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Round : 1"
+horizontal_alignment = 1
+vertical_alignment = 1

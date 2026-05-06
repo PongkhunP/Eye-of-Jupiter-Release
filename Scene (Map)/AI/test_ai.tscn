@@ -1,25 +1,25 @@
 [gd_scene format=3 uid="uid://08lakydtxfbc"]
 
-[ext_resource type="PackedScene" uid="uid://c0fjlv2qxdyua" path="res://Scene (Map)/tutorial.tscn" id="1_tutorial_scene"]
-[ext_resource type="Script" uid="uid://bw1crmgfrlxd2" path="res://Script/AI/EnemyBrain.cs" id="2_enemy_bt"]
-[ext_resource type="Script" uid="uid://denh2x4okx6u1" path="res://Script/AI/ZeusBrain.cs" id="3_zeus_bt"]
-[ext_resource type="Script" uid="uid://b1airw64hkomn" path="res://Script/Debug/StatsHud.cs" id="4_stats_hud"]
-[ext_resource type="Texture2D" uid="uid://dlpcmyugl2y8u" path="res://Asset/Sprout Lands - Sprites - Basic pack/Characters/chicken.tres" id="5_zeus_texture"]
-[ext_resource type="Texture2D" uid="uid://b2qgmwvscl3dp" path="res://Asset/Sprout Lands - Sprites - Basic pack/Characters/new_atlas_texture.tres" id="6_enemy_texture"]
+[ext_resource type="PackedScene" uid="uid://c0fjlv2qxdyua" path="res://Scene (Map)/Map/tutorial.tscn" id="1_wv3om"]
+[ext_resource type="Script" uid="uid://bw1crmgfrlxd2" path="res://Script/AI/EnemyBrain.cs" id="2_ncdyy"]
+[ext_resource type="Script" uid="uid://denh2x4okx6u1" path="res://Script/AI/ZeusBrain.cs" id="3_o2sdt"]
+[ext_resource type="Texture2D" uid="uid://b2qgmwvscl3dp" path="res://Asset/Sprout Lands - Sprites - Basic pack/Characters/new_atlas_texture.tres" id="4_sambn"]
+[ext_resource type="Texture2D" uid="uid://dlpcmyugl2y8u" path="res://Asset/Sprout Lands - Sprites - Basic pack/Characters/chicken.tres" id="5_o3t7p"]
+[ext_resource type="Script" uid="uid://b1airw64hkomn" path="res://Script/Debug/StatsHud.cs" id="6_rdsf2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_enemy"]
 size = Vector2(18, 18)
 
 [node name="TestAI" type="Node2D" unique_id=872833642]
 
-[node name="TutorialWorld" parent="." unique_id=721527738 instance=ExtResource("1_tutorial_scene")]
+[node name="TutorialWorld" parent="." unique_id=721527738 instance=ExtResource("1_wv3om")]
 
 [node name="Enemy" type="CharacterBody2D" parent="TutorialWorld" unique_id=1892166170]
 position = Vector2(220, 0)
 collision_layer = 2
 collision_mask = 0
 motion_mode = 1
-script = ExtResource("2_enemy_bt")
+script = ExtResource("2_ncdyy")
 DetectionRange = 600.0
 AttackRange = 75.0
 AttackCooldownSeconds = 0.9
@@ -31,7 +31,7 @@ shape = SubResource("RectangleShape2D_enemy")
 
 [node name="Zeus" type="Node2D" parent="TutorialWorld" unique_id=1412562011]
 position = Vector2(0, -180)
-script = ExtResource("3_zeus_bt")
+script = ExtResource("3_o2sdt")
 BoltCooldownSeconds = 1.8
 SmiteCooldownSeconds = 4.5
 AreaDenialCooldownSeconds = 5.5
@@ -41,7 +41,7 @@ ZapVfxWidth = 5.0
 texture_filter = 1
 position = Vector2(516.99994, 394.99997)
 scale = Vector2(1.6, 1.6)
-texture = ExtResource("6_enemy_texture")
+texture = ExtResource("4_sambn")
 
 [node name="Enemy#Label" type="Label" parent="." unique_id=496069877]
 offset_left = -30.0
@@ -54,7 +54,7 @@ text = "ENEMY"
 modulate = Color(1, 0.95, 0.5, 1)
 position = Vector2(389, 408)
 scale = Vector2(3, 3)
-texture = ExtResource("5_zeus_texture")
+texture = ExtResource("5_o3t7p")
 
 [node name="Zeus#Label" type="Label" parent="." unique_id=615737362]
 offset_left = -26.0
@@ -65,7 +65,7 @@ text = "ZEUS"
 
 [node name="StatsHud" type="CanvasLayer" parent="." unique_id=1452211364]
 layer = 200
-script = ExtResource("4_stats_hud")
+script = ExtResource("6_rdsf2")
 O2LabelPath = NodePath("Panel/O2Label")
 HpLabelPath = NodePath("Panel/HpLabel")
 HintLabelPath = NodePath("Panel/HintLabel")

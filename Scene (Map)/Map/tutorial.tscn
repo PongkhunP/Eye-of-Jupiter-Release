@@ -1,12 +1,13 @@
 [gd_scene format=4 uid="uid://c0fjlv2qxdyua"]
 
-[ext_resource type="PackedScene" uid="uid://dcmmdsvh70wd3" path="res://Scene (Map)/main character.tscn" id="1_ndps3"]
+[ext_resource type="PackedScene" uid="uid://dcmmdsvh70wd3" path="res://Scene (Map)/MC/main character.tscn" id="1_ndps3"]
 [ext_resource type="Texture2D" uid="uid://knbwvxd7ctnr" path="res://Asset/Sprout Lands - Sprites - Basic pack/Tilesets/Grass.png" id="2_u7kup"]
-[ext_resource type="PackedScene" path="res://Scene (Map)/IngameUI.tscn" id="3_u7kup"]
+[ext_resource type="PackedScene" uid="uid://ddyuhsbeah23c" path="res://Scene (Map)/UI/IngameUI.tscn" id="3_u7kup"]
 [ext_resource type="Texture2D" uid="uid://r6gpgd0f6mqy" path="res://Asset/Sprout Lands - Sprites - Basic pack/Tilesets/Water.png" id="4_mvpo8"]
 [ext_resource type="Script" uid="uid://duknskfrhnnbl" path="res://Script/ObstacleManager.cs" id="5_hi76t"]
-[ext_resource type="PackedScene" uid="uid://durf0qmcvyvv1" path="res://Scene (Map)/npc.tscn" id="6_hi76t"]
-[ext_resource type="PackedScene" uid="uid://8myv7o3lfij8" path="res://Scene (Map)/npc-2.tscn" id="7_awtip"]
+[ext_resource type="PackedScene" uid="uid://durf0qmcvyvv1" path="res://Scene (Map)/AI/npc.tscn" id="6_hi76t"]
+[ext_resource type="PackedScene" uid="uid://8myv7o3lfij8" path="res://Scene (Map)/AI/npc-2.tscn" id="7_awtip"]
+[ext_resource type="PackedScene" uid="uid://y30kxo3ai55e" path="res://Scene (Map)/AI/normal_enemy_ai.tscn" id="8_sq1dk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m875m"]
 texture = ExtResource("2_u7kup")
@@ -98,7 +99,7 @@ sources/0 = SubResource("TileSetAtlasSource_awtip")
 
 [node name="Tutorial" type="Node2D" unique_id=1282519462]
 
-[node name="CanvasLayer" parent="." unique_id=53764026 instance=ExtResource("3_u7kup")]
+[node name="InGameUI" parent="." unique_id=53764026 instance=ExtResource("3_u7kup")]
 
 [node name="FloorLayer" type="TileMapLayer" parent="." unique_id=2047754791]
 use_parent_material = true
@@ -121,3 +122,6 @@ position = Vector2(142, 109)
 
 [node name="npc2" parent="." unique_id=1922702129 groups=["player"] instance=ExtResource("7_awtip")]
 position = Vector2(186, 62)
+
+[node name="EnemyAI" parent="." unique_id=599401367 instance=ExtResource("8_sq1dk")]
+position = Vector2(51, 238)

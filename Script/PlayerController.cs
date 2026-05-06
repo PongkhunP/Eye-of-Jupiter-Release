@@ -15,6 +15,7 @@ public partial class PlayerController : CharacterBody2D
 
 	private Area2D _hazardDetector;
 	private Area2D _interactRange;
+	private AnimatedSprite2D _sprite;
 
 	public override void _EnterTree() => Instance = this;
 
@@ -32,6 +33,7 @@ public partial class PlayerController : CharacterBody2D
 
 		_hazardDetector = GetNodeOrNull<Area2D>("HazardDetector");
 		_interactRange = GetNodeOrNull<Area2D>("InteractRange");
+		_sprite         = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
 	}
 
 	// ── Physics loop ──────────────────────────────────────────────────────────
@@ -49,6 +51,7 @@ public partial class PlayerController : CharacterBody2D
 		{
 			Velocity = Vector2.Zero;
 			MoveAndSlide();
+			UpdateAnimation(Vector2.Zero);
 			return;
 		}
 
@@ -57,6 +60,7 @@ public partial class PlayerController : CharacterBody2D
 		{
 			Velocity = Vector2.Zero;
 			MoveAndSlide();
+			UpdateAnimation(Vector2.Zero);
 			return;
 		}
 
@@ -74,6 +78,7 @@ public partial class PlayerController : CharacterBody2D
 			input = input.Normalized();
 		Velocity = input * Speed;
 		MoveAndSlide();
+		UpdateAnimation(input);
 	}
 
 	private void TickStats(float dt, PlayerStatManager stats)
@@ -124,4 +129,34 @@ public partial class PlayerController : CharacterBody2D
 			}
 		}
 	}
+
+	private void UpdateAnimation(Vector2 input)
+    {
+        if (_sprite == null) return;
+
+        if (input == Vector2.Zero)
+        {
+            // Swap to idle variant of whatever direction the sprite is already facing.
+            // Convention: animation names are "walk_right", "idle_right", etc.
+            string current = _sprite.Animation;
+            if (current.StartsWith("walk_"))
+                _sprite.Play("idle_" + current["walk_".Length..]);
+            else if (!current.StartsWith("idle_"))
+                _sprite.Play("idle_down");   // safe fallback
+
+            return;
+        }
+
+        // Pick dominant axis so diagonals don't feel weird.
+        if (Mathf.Abs(input.X) >= Mathf.Abs(input.Y))
+        {
+            _sprite.FlipH = input.X < 0;   // mirror left from right sprite — delete if you have separate left frames
+            _sprite.Play("walk_right");
+        }
+        else
+        {
+            _sprite.FlipH = false;
+            _sprite.Play(input.Y < 0 ? "walk_up" : "walk_down");
+        }
+    }
 }
