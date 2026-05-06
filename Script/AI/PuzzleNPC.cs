@@ -53,6 +53,9 @@ public partial class PuzzleNPC : Node2D
                 break;
             case PuzzleType.MemoryPuzzle:
                 PuzzleManager.Instance.StartMemoryPuzzle(ShrineId, time);
+				break;
+            case PuzzleType.OpenTheLock:
+                PuzzleManager.Instance.StartOpenLockPuzzle(ShrineId, time);
                 break;
         }
     }

@@ -8,6 +8,8 @@ public partial class PuzzleUI : Control
 	[Export] private Control _riddleSection;
 	[Export] private Control _memorySection;
 
+	[Export] private Control _lockSection;
+ 
 	// ---- timer bar (shared, lives on PuzzleUI root level) -------------------
 	[Export] private ProgressBar _timerBar;   // or ProgressBar
 	[Export] private Label _timerLabel;
@@ -74,6 +76,13 @@ public partial class PuzzleUI : Control
 					riddle.Populate(question, hint);
 				_riddleSection.Visible = true;
 				break;
+
+			case PuzzleType.OpenTheLock:
+				int digits = data.ContainsKey("digits") ? data["digits"].AsInt32() : 4;
+				if (_lockSection is LockPuzzleSection lockSection)
+					lockSection.Populate(question, hint, digits);
+				_lockSection.Visible = true;
+				break;
 		}
 
 		Visible = true;
@@ -136,5 +145,6 @@ public partial class PuzzleUI : Control
 		if (_mathSection != null) _mathSection.Visible = false;
 		if (_riddleSection != null) _riddleSection.Visible = false;
 		if (_memorySection != null) _memorySection.Visible = false;
+		if (_lockSection   != null) _lockSection.Visible   = false;
 	}
 }

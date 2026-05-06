@@ -1,0 +1,86 @@
+[gd_scene format=3 uid="uid://c3f1l0ckpuzz1e"]
+
+[ext_resource type="Script" path="res://Script/UI/LockPuzzleSection.cs" id="1_lock"]
+
+[node name="LockPuzzle" type="Control" node_paths=PackedStringArray("_questionLabel", "_hintLabel", "_codeInput", "_submitButton", "_feedbackLabel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lock")
+_questionLabel = NodePath("LockPanel/QuestionLabel")
+_hintLabel = NodePath("LockPanel/HintLabel")
+_codeInput = NodePath("LockPanel/CodeInput")
+_submitButton = NodePath("SubmitButton")
+_feedbackLabel = NodePath("LockPanel/FeedbackLabel")
+
+[node name="LockPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -251.0
+offset_top = -262.0
+offset_right = 251.0
+offset_bottom = 138.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="QuestionLabel" type="RichTextLabel" parent="LockPanel"]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 66.0
+offset_right = 492.0
+offset_bottom = 205.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HintLabel" type="Label" parent="LockPanel"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 225.0
+offset_right = 485.0
+offset_bottom = 263.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FeedbackLabel" type="Label" parent="LockPanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -225.0
+offset_top = 10.0
+offset_right = 225.0
+offset_bottom = 33.0
+grow_horizontal = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CodeInput" type="LineEdit" parent="LockPanel"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 331.0
+offset_right = 486.0
+offset_bottom = 381.0
+placeholder_text = "____"
+
+[node name="SubmitButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -94.0
+offset_top = 148.0
+offset_right = 94.0
+offset_bottom = 194.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Unlock"
+
