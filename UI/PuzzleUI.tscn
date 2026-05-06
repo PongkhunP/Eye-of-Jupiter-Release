@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://c3golinita4cm" path="res://Scene (Map)/UI/riddle_puzzle.tscn" id="3_p5jmq"]
 [ext_resource type="PackedScene" uid="uid://b6ojv22qmb30p" path="res://Scene (Map)/UI/memory_puzzle.tscn" id="4_tl448"]
 
-[node name="PuzzleUI" type="Control" unique_id=852471946 node_paths=PackedStringArray("_mathSection", "_riddleSection", "_timerBar", "_timerLabel")]
+[node name="PuzzleUI" type="Control" unique_id=852471946 node_paths=PackedStringArray("_mathSection", "_riddleSection", "_memorySection", "_timerBar", "_timerLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,6 +15,7 @@ grow_vertical = 2
 script = ExtResource("1_p5jmq")
 _mathSection = NodePath("Panel/MathPuzzle")
 _riddleSection = NodePath("Panel/RiddlePuzzle")
+_memorySection = NodePath("Panel/MemoryPuzzle")
 _timerBar = NodePath("Panel/Timebar")
 _timerLabel = NodePath("Panel/TimeLabel")
 

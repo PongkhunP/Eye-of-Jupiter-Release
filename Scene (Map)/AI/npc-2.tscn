@@ -8,7 +8,7 @@ size = Vector2(28, 20)
 
 [node name="NPC-2" type="Node2D" unique_id=1705833080]
 script = ExtResource("1_0ijae")
-PuzzleType = 2
+PuzzleKind = 4
 TimeOverride = 15.0
 
 [node name="Area2D" type="Area2D" parent="." unique_id=1423021865]
@@ -19,5 +19,6 @@ position = Vector2(26, 27)
 shape = SubResource("RectangleShape2D_bfeth")
 
 [node name="Sprite2D" type="Sprite2D" parent="Area2D" unique_id=1136323764]
+texture_filter = 3
 position = Vector2(25, 22)
 texture = ExtResource("1_mjwsd")

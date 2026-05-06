@@ -33,13 +33,16 @@ public partial class PlayerController : CharacterBody2D
 
 		_hazardDetector = GetNodeOrNull<Area2D>("HazardDetector");
 		_interactRange = GetNodeOrNull<Area2D>("InteractRange");
-		_sprite         = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
+		_sprite = GetNodeOrNull<AnimatedSprite2D>("AnimatedSprite2D");
 	}
 
 	// ── Physics loop ──────────────────────────────────────────────────────────
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (PuzzleManager.Instance.IsPuzzleActive) return;
+		if (DialogueManager.Instance.IsDialogueActive) return;
+		
 		var stats = PlayerStatManager.Instance;
 		if (stats == null)
 		{
@@ -131,32 +134,32 @@ public partial class PlayerController : CharacterBody2D
 	}
 
 	private void UpdateAnimation(Vector2 input)
-    {
-        if (_sprite == null) return;
+	{
+		if (_sprite == null) return;
 
-        if (input == Vector2.Zero)
-        {
-            // Swap to idle variant of whatever direction the sprite is already facing.
-            // Convention: animation names are "walk_right", "idle_right", etc.
-            string current = _sprite.Animation;
-            if (current.StartsWith("walk_"))
-                _sprite.Play("idle_" + current["walk_".Length..]);
-            else if (!current.StartsWith("idle_"))
-                _sprite.Play("idle_down");   // safe fallback
+		if (input == Vector2.Zero)
+		{
+			// Swap to idle variant of whatever direction the sprite is already facing.
+			// Convention: animation names are "walk_right", "idle_right", etc.
+			string current = _sprite.Animation;
+			if (current.StartsWith("walk_"))
+				_sprite.Play("idle_" + current["walk_".Length..]);
+			else if (!current.StartsWith("idle_"))
+				_sprite.Play("idle_down");   // safe fallback
 
-            return;
-        }
+			return;
+		}
 
-        // Pick dominant axis so diagonals don't feel weird.
-        if (Mathf.Abs(input.X) >= Mathf.Abs(input.Y))
-        {
-            _sprite.FlipH = input.X < 0;   // mirror left from right sprite — delete if you have separate left frames
-            _sprite.Play("walk_right");
-        }
-        else
-        {
-            _sprite.FlipH = false;
-            _sprite.Play(input.Y < 0 ? "walk_up" : "walk_down");
-        }
-    }
+		// Pick dominant axis so diagonals don't feel weird.
+		if (Mathf.Abs(input.X) >= Mathf.Abs(input.Y))
+		{
+			_sprite.FlipH = input.X < 0;   // mirror left from right sprite — delete if you have separate left frames
+			_sprite.Play("walk_right");
+		}
+		else
+		{
+			_sprite.FlipH = false;
+			_sprite.Play(input.Y < 0 ? "walk_up" : "walk_down");
+		}
+	}
 }

@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 /// <summary>
 /// Autoload: tracks divine trials, puzzle flow, and escape pod unlock (3 shrines).
@@ -13,10 +14,12 @@ public partial class PuzzleManager : Node
 	public const int DefaultTrialsRequired = 3;
 	public const string RiddleDataPath = "res://Data/riddles.json";
 	public const string PuzzleUiScenePath = "res://UI/PuzzleUI.tscn";
+
 	private PuzzleUI _ui;
 
 	// How long (seconds) the player has per puzzle. Override per shrine if needed.
 	public const float DefaultPuzzleTime = 30f;
+	public const int MemoryTotalRounds = 5;
 
 	// -------------------------------------------------------------------------
 	// Exports
@@ -49,6 +52,17 @@ public partial class PuzzleManager : Node
 	[Signal] public delegate void TrialCompletedEventHandler(string shrineId);
 	[Signal] public delegate void TrialFailedEventHandler(string shrineId);
 	[Signal] public delegate void EscapePodUnlockedEventHandler();
+	/// <summary>Fired at the start of each round. UI plays back the sequence then waits for input.</summary>
+	[Signal] public delegate void MemorySequenceStartedEventHandler(int[] sequence, int round, int totalRounds);
+
+	/// <summary>Fired when the player nails a round. UI shows next round's sequence.</summary>
+	[Signal] public delegate void MemoryRoundPassedEventHandler(int[] sequence, int nextRound, int totalRounds);
+
+	/// <summary>Fired when the player submits a wrong sequence.</summary>
+	[Signal] public delegate void MemoryRoundFailedEventHandler();
+
+	/// <summary>Fired when all 5 rounds are cleared.</summary>
+	[Signal] public delegate void MemoryPuzzleCompletedEventHandler(string shrineId);
 
 	// -------------------------------------------------------------------------
 	// Private state
@@ -66,8 +80,12 @@ public partial class PuzzleManager : Node
 	private float _totalTime;
 	private bool _timerRunning;
 
+	private int[] _memorySequence;
+	private int _memoryRound;
+	private string _memoryShrineId;
 
-	// -------------------------------------------------------------------------
+
+	// --------------------------------------------------- ----------------------
 	// Godot lifecycle
 	// -------------------------------------------------------------------------
 	public override void _EnterTree() => Instance = this;
@@ -80,7 +98,7 @@ public partial class PuzzleManager : Node
 	public override void _Ready()
 	{
 		LoadRiddleData();
-		CallDeferred(nameof(EnsureUi)); 
+		CallDeferred(nameof(EnsureUi));
 	}
 
 	public override void _Process(double delta)
@@ -270,6 +288,27 @@ public partial class PuzzleManager : Node
 
 		BeginPuzzle(PuzzleType.ZeusRiddle, shrineId, timeOverride);
 	}
+	/// <summary>
+	/// Generates a full 5-step sequence and fires MemorySequenceStarted for round 1.
+	/// Button indices: 0=TopLeft  1=TopRight  2=BottomLeft  3=BottomRight
+	/// </summary>
+	public void StartMemoryPuzzle(string shrineId, float? timeOverride = null)
+	{
+		_memoryShrineId = shrineId;
+		_memoryRound = 1;
+		_memorySequence = GenerateMemorySequence(MemoryTotalRounds);
+
+		_activeType = PuzzleType.MemoryPuzzle;
+		_activeShrineId = shrineId;
+
+		StartTimer(timeOverride ?? PuzzleTimeLimit);
+
+		EmitSignal(SignalName.MemorySequenceStarted,
+			_memorySequence.Take(_memoryRound).ToArray(),
+			_memoryRound,
+			MemoryTotalRounds);
+	}
+
 
 	/// <summary>Legacy entry point — kept for backward compatibility.</summary>
 	public void StartPuzzle(PuzzleType type, Godot.Collections.Dictionary payload)
@@ -281,6 +320,12 @@ public partial class PuzzleManager : Node
 			case PuzzleType.Math: StartMathPuzzle(shrineId); break;
 			case PuzzleType.NumberSequence: StartSequencePuzzle(shrineId); break;
 			case PuzzleType.ZeusRiddle: StartRiddlePuzzle(shrineId); break;
+			case PuzzleType.MemoryPuzzle: StartMemoryPuzzle(shrineId); break;
+			case PuzzleType.PipePuzzle:
+			case PuzzleType.OpenTheLock:
+			case PuzzleType.PlanRoute:
+				GD.PushWarning($"{nameof(PuzzleManager)}: {type} not implemented yet.");
+				break;
 		}
 	}
 
@@ -291,6 +336,7 @@ public partial class PuzzleManager : Node
 		_activePayload = null;
 		_activePuzzleData = null;
 		_activeShrineId = null;
+		CancelMemoryState();
 	}
 
 	// -------------------------------------------------------------------------
@@ -367,7 +413,7 @@ public partial class PuzzleManager : Node
 	private void OnTimerExpired()
 	{
 		StopTimer();
-		string shrineId = _activeShrineId ?? string.Empty;
+		string shrineId = _activeShrineId ?? _memoryShrineId ?? string.Empty;
 		CancelPuzzle();
 		EmitSignal(SignalName.PuzzleTimerExpired, shrineId);
 		if (!string.IsNullOrEmpty(shrineId))
@@ -485,6 +531,24 @@ public partial class PuzzleManager : Node
 		}
 	}
 
+	private void CancelMemoryState()
+	{
+		_memorySequence = null;
+		_memoryShrineId = null;
+		_memoryRound = 0;
+	}
+
+	// -------------------------------------------------------------------------
+	// Generators
+	// -------------------------------------------------------------------------
+	private int[] GenerateMemorySequence(int length)
+	{
+		var seq = new int[length];
+		for (int i = 0; i < length; i++)
+			seq[i] = _rng.Next(4); // 0=TL 1=TR 2=BL 3=BR
+		return seq;
+	}
+
 	private static string FormatSequence(int[] arr) => string.Join(", ", arr);
 
 	// -------------------------------------------------------------------------
@@ -514,6 +578,48 @@ public partial class PuzzleManager : Node
 				return true;
 
 		return false;
+	}
+
+	public void ValidateMemoryAnswer(int[] playerSequence)
+	{
+		if (_activeType != PuzzleType.MemoryPuzzle || _memorySequence == null)
+			return;
+
+		var expected = _memorySequence.Take(_memoryRound).ToArray();
+
+		if (!expected.SequenceEqual(playerSequence))
+		{
+			// Wrong sequence — fail
+			StopTimer();
+			EmitSignal(SignalName.MemoryRoundFailed);
+			EmitSignal(SignalName.TrialFailed, _memoryShrineId ?? "");
+			_activeType = null;
+			CancelMemoryState();
+			return;
+		}
+
+		// Correct!
+		if (_memoryRound >= MemoryTotalRounds)
+		{
+			// All rounds cleared — puzzle complete
+			StopTimer();
+			string shrineId = _memoryShrineId ?? "";
+			_activeType = null;
+			CancelMemoryState();
+			RegisterTrialSolved(shrineId);
+			EmitSignal(SignalName.MemoryPuzzleCompleted, shrineId);
+			return;
+		}
+
+		// Advance to next round
+		_memoryRound++;
+		StopTimer();
+		StartTimer(PuzzleTimeLimit);
+
+		EmitSignal(SignalName.MemoryRoundPassed,
+			_memorySequence.Take(_memoryRound).ToArray(),
+			_memoryRound,
+			MemoryTotalRounds);
 	}
 
 	private static double ToDouble(Variant v)

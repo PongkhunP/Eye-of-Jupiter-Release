@@ -4,7 +4,7 @@ using System;
 public partial class PuzzleNPC : Node2D
 {
 	[Export] public string ShrineId   = "shrine_a";       // must be unique per shrine
-    [Export] public PuzzleType PuzzleType = PuzzleType.Math; // set in editor per NPC
+    [Export] public PuzzleType PuzzleKind = PuzzleType.Math; // set in editor per NPC
     [Export] public float TimeOverride = 0f;
 
 	private bool _playerInRange = false;
@@ -13,7 +13,7 @@ public partial class PuzzleNPC : Node2D
         var area = GetNode<Area2D>("Area2D");
         area.BodyEntered += OnBodyEntered;
         area.BodyExited  += OnBodyExited;
-        GD.Print($"{Name} ready — ShrineId: {ShrineId}, Type: {PuzzleType}");
+        GD.Print($"{Name} ready — ShrineId: {ShrineId}, Type: {PuzzleKind}");
     }
 
 	public override void _Process(double delta)
@@ -32,7 +32,7 @@ public partial class PuzzleNPC : Node2D
             return;
         }
 
-        GD.Print($"Starting {PuzzleType} puzzle for {ShrineId}");
+        GD.Print($"Starting {PuzzleKind} puzzle for {ShrineId}");
         StartPuzzle();
     }
 
@@ -40,7 +40,7 @@ public partial class PuzzleNPC : Node2D
     {
         float? time = TimeOverride > 0f ? TimeOverride : null;
 
-        switch (PuzzleType)
+        switch (PuzzleKind)
         {
             case PuzzleType.Math:
                 PuzzleManager.Instance.StartMathPuzzle(ShrineId, time);
@@ -50,6 +50,9 @@ public partial class PuzzleNPC : Node2D
                 break;
             case PuzzleType.ZeusRiddle:
                 PuzzleManager.Instance.StartRiddlePuzzle(ShrineId, time);
+                break;
+            case PuzzleType.MemoryPuzzle:
+                PuzzleManager.Instance.StartMemoryPuzzle(ShrineId, time);
                 break;
         }
     }

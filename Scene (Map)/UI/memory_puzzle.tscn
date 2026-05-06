@@ -1,12 +1,22 @@
 [gd_scene format=3 uid="uid://b6ojv22qmb30p"]
 
-[node name="MemoryPuzzle" type="Control" unique_id=515218658]
+[ext_resource type="Script" uid="uid://pqlucgtdbtfc" path="res://Script/UI/MemoryPuzzleSection.cs" id="1_irm5s"]
+
+[node name="MemoryPuzzle" type="Control" unique_id=515218658 node_paths=PackedStringArray("_btnTopLeft", "_btnTopRight", "_btnBottomLeft", "_btnBottomRight", "_submitButton", "_roundLabel", "_statusLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_irm5s")
+_btnTopLeft = NodePath("MemoryButtonGreen")
+_btnTopRight = NodePath("MemoryButtonYellow")
+_btnBottomLeft = NodePath("MemoryButtonBlue")
+_btnBottomRight = NodePath("MemoryButtonRed")
+_submitButton = NodePath("SubmitButton")
+_roundLabel = NodePath("RoundLabel")
+_statusLabel = NodePath("StatusLabel")
 
 [node name="SubmitButton" type="Button" parent="." unique_id=852128966]
 layout_mode = 1
@@ -79,7 +89,7 @@ offset_bottom = 37.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="." unique_id=610322260]
+[node name="RoundLabel" type="Label" parent="." unique_id=610322260]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -93,5 +103,22 @@ offset_bottom = 103.5
 grow_horizontal = 2
 grow_vertical = 2
 text = "Round : 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="." unique_id=251355029]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -208.0
+offset_top = -290.0
+offset_right = 200.0
+offset_bottom = -256.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Status"
 horizontal_alignment = 1
 vertical_alignment = 1

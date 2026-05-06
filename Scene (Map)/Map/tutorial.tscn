@@ -7,7 +7,6 @@
 [ext_resource type="Script" uid="uid://duknskfrhnnbl" path="res://Script/ObstacleManager.cs" id="5_hi76t"]
 [ext_resource type="PackedScene" uid="uid://durf0qmcvyvv1" path="res://Scene (Map)/AI/npc.tscn" id="6_hi76t"]
 [ext_resource type="PackedScene" uid="uid://8myv7o3lfij8" path="res://Scene (Map)/AI/npc-2.tscn" id="7_awtip"]
-[ext_resource type="PackedScene" uid="uid://y30kxo3ai55e" path="res://Scene (Map)/AI/normal_enemy_ai.tscn" id="8_sq1dk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m875m"]
 texture = ExtResource("2_u7kup")
@@ -122,6 +121,4 @@ position = Vector2(142, 109)
 
 [node name="npc2" parent="." unique_id=1922702129 groups=["player"] instance=ExtResource("7_awtip")]
 position = Vector2(186, 62)
-
-[node name="EnemyAI" parent="." unique_id=599401367 instance=ExtResource("8_sq1dk")]
-position = Vector2(51, 238)
+PuzzleType = 4
