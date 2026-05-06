@@ -7,6 +7,7 @@ using System.Linq;
 /// <summary>
 /// Autoload: tracks divine trials, puzzle flow, and escape pod unlock (3 shrines).
 /// </summary>
+/// 
 public partial class PuzzleManager : Node
 {
 	public static PuzzleManager Instance { get; private set; }

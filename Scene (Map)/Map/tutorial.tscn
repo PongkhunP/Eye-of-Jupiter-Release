@@ -121,4 +121,4 @@ position = Vector2(142, 109)
 
 [node name="npc2" parent="." unique_id=1922702129 groups=["player"] instance=ExtResource("7_awtip")]
 position = Vector2(186, 62)
-PuzzleType = 4
+PuzzleKind = 5

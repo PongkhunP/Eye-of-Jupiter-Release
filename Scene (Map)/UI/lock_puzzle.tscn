@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://c3f1l0ckpuzz1e"]
+[gd_scene format=3 uid="uid://dn8ptyiob50t1"]
 
 [ext_resource type="Script" path="res://Script/UI/LockPuzzleSection.cs" id="1_lock"]
 
