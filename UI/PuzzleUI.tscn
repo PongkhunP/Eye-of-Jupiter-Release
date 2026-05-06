@@ -4,8 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://c70ygglftnbbx" path="res://Scene (Map)/UI/math_puzzle.tscn" id="2_ahs4d"]
 [ext_resource type="PackedScene" uid="uid://c3golinita4cm" path="res://Scene (Map)/UI/riddle_puzzle.tscn" id="3_p5jmq"]
 [ext_resource type="PackedScene" uid="uid://b6ojv22qmb30p" path="res://Scene (Map)/UI/memory_puzzle.tscn" id="4_tl448"]
+[ext_resource type="PackedScene" path="res://Scene (Map)/UI/lock_puzzle.tscn" id="5_locksec"]
 
-[node name="PuzzleUI" type="Control" unique_id=852471946 node_paths=PackedStringArray("_mathSection", "_riddleSection", "_timerBar", "_timerLabel")]
+[node name="PuzzleUI" type="Control" unique_id=852471946 node_paths=PackedStringArray("_mathSection", "_riddleSection", "_lockSection", "_timerBar", "_timerLabel")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,6 +16,7 @@ grow_vertical = 2
 script = ExtResource("1_p5jmq")
 _mathSection = NodePath("Panel/MathPuzzle")
 _riddleSection = NodePath("Panel/RiddlePuzzle")
+_lockSection = NodePath("Panel/LockPuzzle")
 _timerBar = NodePath("Panel/Timebar")
 _timerLabel = NodePath("Panel/TimeLabel")
 
@@ -55,6 +57,10 @@ offset_top = -0.5
 offset_bottom = -0.5
 
 [node name="MemoryPuzzle" parent="Panel" unique_id=364935116 instance=ExtResource("4_tl448")]
+visible = false
+layout_mode = 1
+
+[node name="LockPuzzle" parent="Panel" instance=ExtResource("5_locksec")]
 visible = false
 layout_mode = 1
 

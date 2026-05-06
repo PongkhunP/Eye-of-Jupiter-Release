@@ -271,6 +271,32 @@ public partial class PuzzleManager : Node
 		BeginPuzzle(PuzzleType.ZeusRiddle, shrineId, timeOverride);
 	}
 
+	/// <summary>
+	/// Start a digital lock puzzle.
+	/// UI data: { "question": "Enter the 4-digit code", "hint": "...", "digits": 4 }
+	/// Payload: { "lock_code": "1234" }
+	/// </summary>
+	public void StartOpenLockPuzzle(string shrineId, float? timeOverride = null)
+	{
+		int digits = 4;
+		string code = GenerateLockCode(digits);
+
+		_activePayload = new Godot.Collections.Dictionary
+		{
+			{ "shrine_id", shrineId },
+			{ "lock_code", code     }
+		};
+
+		_activePuzzleData = new Godot.Collections.Dictionary
+		{
+			{ "question", $"Enter the {digits}-digit lock code" },
+			{ "hint",     "Only digits are accepted" },
+			{ "digits",   digits }
+		};
+
+		BeginPuzzle(PuzzleType.OpenTheLock, shrineId, timeOverride);
+	}
+
 	/// <summary>Legacy entry point — kept for backward compatibility.</summary>
 	public void StartPuzzle(PuzzleType type, Godot.Collections.Dictionary payload)
 	{
@@ -281,6 +307,7 @@ public partial class PuzzleManager : Node
 			case PuzzleType.Math: StartMathPuzzle(shrineId); break;
 			case PuzzleType.NumberSequence: StartSequencePuzzle(shrineId); break;
 			case PuzzleType.ZeusRiddle: StartRiddlePuzzle(shrineId); break;
+			case PuzzleType.OpenTheLock: StartOpenLockPuzzle(shrineId); break;
 		}
 	}
 
@@ -305,6 +332,7 @@ public partial class PuzzleManager : Node
 			PuzzleType.Math => ValidateMath(answer),
 			PuzzleType.NumberSequence => ValidateSequence(answer),
 			PuzzleType.ZeusRiddle => ValidateRiddle(answer),
+			PuzzleType.OpenTheLock => ValidateOpenLock(answer),
 			_ => false
 		};
 
@@ -516,6 +544,24 @@ public partial class PuzzleManager : Node
 		return false;
 	}
 
+	private bool ValidateOpenLock(Variant answer)
+	{
+		if (_activePayload == null || !_activePayload.ContainsKey("lock_code"))
+			return false;
+
+		string expected = _activePayload["lock_code"].AsString().Trim();
+		string input = answer.AsString().Trim();
+
+		if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(expected))
+			return false;
+
+		foreach (char c in input)
+			if (!char.IsDigit(c))
+				return false;
+
+		return input == expected;
+	}
+
 	private static double ToDouble(Variant v)
 	{
 		if (v.VariantType == Variant.Type.Int) return v.AsInt32();
@@ -524,6 +570,17 @@ public partial class PuzzleManager : Node
 			double.TryParse(v.AsString(), NumberStyles.Float, CultureInfo.InvariantCulture, out double d))
 			return d;
 		return double.NaN;
+	}
+
+	private string GenerateLockCode(int digits)
+	{
+		Span<char> buffer = stackalloc char[digits];
+		for (int i = 0; i < digits; i++)
+		{
+			int d = _rng.Next(0, 10);
+			buffer[i] = (char)('0' + d);
+		}
+		return new string(buffer);
 	}
 
 	public bool IsShrineSolved(string shrineId)

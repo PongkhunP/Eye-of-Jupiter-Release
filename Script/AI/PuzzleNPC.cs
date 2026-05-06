@@ -51,6 +51,9 @@ public partial class PuzzleNPC : Node2D
             case PuzzleType.ZeusRiddle:
                 PuzzleManager.Instance.StartRiddlePuzzle(ShrineId, time);
                 break;
+            case PuzzleType.OpenTheLock:
+                PuzzleManager.Instance.StartOpenLockPuzzle(ShrineId, time);
+                break;
         }
     }
 
