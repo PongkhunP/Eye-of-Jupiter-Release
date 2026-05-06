@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://8myv7o3lfij8"]
+
+[ext_resource type="Script" uid="uid://b3u66hjw6u8eg" path="res://Script/Npc.cs" id="1_0ijae"]
+[ext_resource type="Texture2D" uid="uid://b2qgmwvscl3dp" path="res://Asset/Sprout Lands - Sprites - Basic pack/Characters/new_atlas_texture.tres" id="1_mjwsd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bfeth"]
+size = Vector2(28, 20)
+
+[node name="NPC-2" type="Node2D" unique_id=1705833080]
+script = ExtResource("1_0ijae")
+NpcId = "poseidon"
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1423021865]
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=357525372]
+position = Vector2(26, 27)
+shape = SubResource("RectangleShape2D_bfeth")
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D" unique_id=1136323764]
+position = Vector2(25, 22)
+texture = ExtResource("1_mjwsd")

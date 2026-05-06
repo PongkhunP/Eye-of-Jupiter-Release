@@ -2,8 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dy0wdxrgiun3u" path="res://Script/PlayerController.cs" id="1_player"]
 [ext_resource type="Script" uid="uid://dx0h3gt485jhb" path="res://Script/PlayerStatManager.cs" id="2_ruc4y"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_a6ff3"]
+[ext_resource type="Texture2D" uid="uid://lblhswklwvnn" path="res://Asset/Sprout Lands - Sprites - Basic pack/Characters/MainChar.tres" id="3_u17yo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_drqot"]
 size = Vector2(16, 16)
@@ -14,20 +13,15 @@ radius = 24.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_ix"]
 radius = 16.0
 
-[node name="Main character" type="CharacterBody2D" unique_id=1315461981]
+[node name="Main character" type="CharacterBody2D" unique_id=1315461981 groups=["player"]]
 collision_layer = 4
-collision_mask = 0
+collision_mask = 3
 motion_mode = 1
 script = ExtResource("1_player")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1736454547]
 position = Vector2(38, 31)
 zoom = Vector2(3, 3)
-
-[node name="MeshInstance2D" type="MeshInstance2D" parent="." unique_id=201933868]
-position = Vector2(38, 31.000004)
-scale = Vector2(16.864, 16)
-mesh = SubResource("BoxMesh_a6ff3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1427249551]
 position = Vector2(38, 31)
@@ -47,5 +41,9 @@ collision_mask = 4
 position = Vector2(38, 31)
 shape = SubResource("CircleShape2D_ix")
 
-[node name="Node" type="Node" parent="." unique_id=905621512]
+[node name="PlayerStat" type="Node" parent="." unique_id=905621512]
 script = ExtResource("2_ruc4y")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1373079047]
+position = Vector2(38, 31)
+texture = ExtResource("3_u17yo")

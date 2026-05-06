@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://durf0qmcvyvv1"]
+
+[ext_resource type="Texture2D" uid="uid://dlpcmyugl2y8u" path="res://Asset/Sprout Lands - Sprites - Basic pack/Characters/chicken.tres" id="1_4st31"]
+[ext_resource type="Script" uid="uid://b3u66hjw6u8eg" path="res://Script/Npc.cs" id="1_f8waq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f8waq"]
+size = Vector2(28, 20)
+
+[node name="NPC" type="Node2D" unique_id=1137448896]
+script = ExtResource("1_f8waq")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=2077907508]
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1289029714]
+position = Vector2(24, 23)
+shape = SubResource("RectangleShape2D_f8waq")
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D" unique_id=1073803240]
+position = Vector2(25, 23)
+texture = ExtResource("1_4st31")

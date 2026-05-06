@@ -3,14 +3,13 @@ using Godot;
 /// <summary>
 /// Bottom panel UI for NPC lore; visibility toggled by DialogueManager.
 /// </summary>
-public partial class DialogueUi : CanvasLayer
+public partial class DialogueUi : Control
 {
 	private RichTextLabel _body;
 	private Label _hint;
 
 	public override void _Ready()
 	{
-		Layer = 100;
 		_body = GetNode<RichTextLabel>("Panel/MarginContainer/VBox/RichTextLabel");
 		_hint = GetNode<Label>("Panel/MarginContainer/VBox/HintLabel");
 		HideDialogue();

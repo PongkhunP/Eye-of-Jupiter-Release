@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://lblhswklwvnn"]
+
+[ext_resource type="Texture2D" uid="uid://dk1wituwch8nv" path="res://Asset/Sprout Lands - Sprites - Basic pack/Characters/Basic Charakter Spritesheet.png" id="1_xgo0x"]
+
+[resource]
+atlas = ExtResource("1_xgo0x")
+region = Rect2(0, 0, 48, 48)

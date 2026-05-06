@@ -60,9 +60,16 @@ public partial class DialogueManager : Node
 			return;
 		}
 
+		var inGameUI = GetTree().GetFirstNodeInGroup("ingame_ui") as CanvasLayer;
+		if (inGameUI == null)
+		{
+			GD.PushWarning($"{nameof(DialogueManager)}: InGameUI CanvasLayer not found");
+			return;
+		}
+
 		var scene = GD.Load<PackedScene>(DialogueUiScenePath);
 		_ui = scene.Instantiate<DialogueUi>();
-		GetTree().Root.AddChild(_ui);
+		inGameUI.AddChild(_ui);
 		_ui.HideDialogue();
 	}
 

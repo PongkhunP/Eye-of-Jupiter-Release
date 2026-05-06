@@ -2,9 +2,11 @@
 
 [ext_resource type="PackedScene" uid="uid://dcmmdsvh70wd3" path="res://Scene (Map)/main character.tscn" id="1_ndps3"]
 [ext_resource type="Texture2D" uid="uid://knbwvxd7ctnr" path="res://Asset/Sprout Lands - Sprites - Basic pack/Tilesets/Grass.png" id="2_u7kup"]
-[ext_resource type="PackedScene" uid="uid://b65qug7vpt3lg" path="res://Scene (Map)/IngameUI.tscn" id="3_u7kup"]
+[ext_resource type="PackedScene" path="res://Scene (Map)/IngameUI.tscn" id="3_u7kup"]
 [ext_resource type="Texture2D" uid="uid://r6gpgd0f6mqy" path="res://Asset/Sprout Lands - Sprites - Basic pack/Tilesets/Water.png" id="4_mvpo8"]
 [ext_resource type="Script" uid="uid://duknskfrhnnbl" path="res://Script/ObstacleManager.cs" id="5_hi76t"]
+[ext_resource type="PackedScene" uid="uid://durf0qmcvyvv1" path="res://Scene (Map)/npc.tscn" id="6_hi76t"]
+[ext_resource type="PackedScene" uid="uid://8myv7o3lfij8" path="res://Scene (Map)/npc-2.tscn" id="7_awtip"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m875m"]
 texture = ExtResource("2_u7kup")
@@ -113,3 +115,9 @@ script = ExtResource("5_hi76t")
 FloorLayer = NodePath("../FloorLayer")
 HazardLayer = NodePath("../HazardLayer")
 ScatterDensity = 0.05
+
+[node name="NPC" parent="." unique_id=1137448896 instance=ExtResource("6_hi76t")]
+position = Vector2(142, 109)
+
+[node name="npc2" parent="." unique_id=1922702129 groups=["player"] instance=ExtResource("7_awtip")]
+position = Vector2(186, 62)
