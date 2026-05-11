@@ -9,7 +9,7 @@ public partial class PuzzleUI : Control
 	[Export] private Control _memorySection;
 
 	[Export] private Control _lockSection;
- 
+
 	// ---- timer bar (shared, lives on PuzzleUI root level) -------------------
 	[Export] private ProgressBar _timerBar;   // or ProgressBar
 	[Export] private Label _timerLabel;
@@ -90,6 +90,12 @@ public partial class PuzzleUI : Control
 
 	private void OnTimerTicked(float remaining, float total)
 	{
+		if (float.IsInfinity(total) || float.IsInfinity(remaining))
+		{
+			if (_timerBar != null) _timerBar.Visible = false;
+			if (_timerLabel != null) _timerLabel.Visible = false;
+			return;
+		}
 		if (_timerBar != null) _timerBar.Value = remaining / total * 100f;
 		if (_timerLabel != null) _timerLabel.Text = $"{Mathf.CeilToInt(remaining)}s";
 	}
@@ -139,12 +145,12 @@ public partial class PuzzleUI : Control
 	// -------------------------------------------------------------------------
 	// Helpers
 	// -------------------------------------------------------------------------
-	private void HideAll()
+	public void HideAll()
 	{
 		Visible = false;
 		if (_mathSection != null) _mathSection.Visible = false;
 		if (_riddleSection != null) _riddleSection.Visible = false;
 		if (_memorySection != null) _memorySection.Visible = false;
-		if (_lockSection   != null) _lockSection.Visible   = false;
+		if (_lockSection != null) _lockSection.Visible = false;
 	}
 }

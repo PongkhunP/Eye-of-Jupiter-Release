@@ -320,6 +320,7 @@ public partial class PuzzleManager : Node
 	{
 		int digits = 4;
 		string code = GenerateLockCode(digits);
+		GD.Print(code);
 
 		_activePayload = new Godot.Collections.Dictionary
 		{
@@ -334,7 +335,7 @@ public partial class PuzzleManager : Node
 			{ "digits",   digits }
 		};
 
-		BeginPuzzle(PuzzleType.OpenTheLock, shrineId, timeOverride);
+		BeginPuzzle(PuzzleType.OpenTheLock, shrineId, float.PositiveInfinity);
 	}
 
 	/// <summary>Legacy entry point — kept for backward compatibility.</summary>

@@ -1,8 +1,33 @@
 [gd_scene format=3 uid="uid://dn8ptyiob50t1"]
 
-[ext_resource type="Script" path="res://Script/UI/LockPuzzleSection.cs" id="1_lock"]
+[ext_resource type="Script" uid="uid://bmfnd1ujppnwo" path="res://Script/UI/LockPuzzleSection.cs" id="1_lock"]
+[ext_resource type="Texture2D" uid="uid://decj03a70hes2" path="res://Asset/close-button-removebg-preview.png" id="2_pf0n0"]
 
-[node name="LockPuzzle" type="Control" node_paths=PackedStringArray("_questionLabel", "_hintLabel", "_codeInput", "_submitButton", "_feedbackLabel")]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rwgf0"]
+bg_color = Color(0.9915889, 0.34944242, 0.32489067, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pf0n0"]
+bg_color = Color(2.3102762e-06, 0.7159964, 0.40297484, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k1q1r"]
+bg_color = Color(0.91764385, 0.91764385, 0.91764385, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7p2nx"]
+bg_color = Color(0.5417868, 0.5417869, 0.54178673, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_du0xv"]
+bg_color = Color(0.7447408, 0.74474084, 0.7447407, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.15307078, 0.9142863, 0.8749784, 1)
+
+[node name="LockPuzzle" type="Control" unique_id=1874420738 node_paths=PackedStringArray("_inputDisplayLabel", "_delButton", "_submitButton", "_feedbackLabel", "_closeButton", "_digitButtons")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -10,13 +35,14 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_lock")
-_questionLabel = NodePath("LockPanel/QuestionLabel")
-_hintLabel = NodePath("LockPanel/HintLabel")
-_codeInput = NodePath("LockPanel/CodeInput")
-_submitButton = NodePath("SubmitButton")
+_inputDisplayLabel = NodePath("LockPanel/DisplayLabel")
+_delButton = NodePath("LockPanel/DelButton")
+_submitButton = NodePath("LockPanel/SubmitButton")
 _feedbackLabel = NodePath("LockPanel/FeedbackLabel")
+_closeButton = NodePath("LockPanel/Closebutton")
+_digitButtons = [NodePath("LockPanel/Button-1"), NodePath("LockPanel/Button-2"), NodePath("LockPanel/Button-3"), NodePath("LockPanel/Button-4"), NodePath("LockPanel/Button-5"), NodePath("LockPanel/Button-6"), NodePath("LockPanel/Button-7"), NodePath("LockPanel/Button-8"), NodePath("LockPanel/Button-9"), NodePath("LockPanel/Button-10")]
 
-[node name="LockPanel" type="Panel" parent="."]
+[node name="LockPanel" type="Panel" parent="." unique_id=2109360560]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -24,63 +50,154 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -251.0
-offset_top = -262.0
+offset_top = -297.0
 offset_right = 251.0
-offset_bottom = 138.0
+offset_bottom = 276.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="QuestionLabel" type="RichTextLabel" parent="LockPanel"]
+[node name="DelButton" type="Button" parent="LockPanel" unique_id=1658990050]
+z_index = 10
 layout_mode = 0
-offset_left = 9.0
-offset_top = 66.0
-offset_right = 492.0
-offset_bottom = 205.0
-horizontal_alignment = 1
-vertical_alignment = 1
+offset_left = 178.0
+offset_top = 458.0
+offset_right = 323.0
+offset_bottom = 561.0
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_rwgf0")
+text = "Del"
 
-[node name="HintLabel" type="Label" parent="LockPanel"]
+[node name="SubmitButton" type="Button" parent="LockPanel" unique_id=47219699]
 layout_mode = 0
-offset_left = 14.0
-offset_top = 225.0
-offset_right = 485.0
-offset_bottom = 263.0
-horizontal_alignment = 1
-vertical_alignment = 1
+offset_left = 333.0
+offset_top = 459.0
+offset_right = 478.0
+offset_bottom = 561.0
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_pf0n0")
+text = "Ok"
 
-[node name="FeedbackLabel" type="Label" parent="LockPanel"]
+[node name="Closebutton" type="Button" parent="LockPanel" unique_id=2143096533]
+layout_mode = 0
+offset_left = 476.0
+offset_top = -35.0
+offset_right = 532.0
+offset_bottom = 22.0
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_k1q1r")
+icon = ExtResource("2_pf0n0")
+
+[node name="FeedbackLabel" type="Label" parent="LockPanel" unique_id=1775721210]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -225.0
-offset_top = 10.0
-offset_right = 225.0
-offset_bottom = 33.0
+offset_left = -220.0
+offset_top = -37.0
+offset_right = 230.0
+offset_bottom = -14.0
 grow_horizontal = 2
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CodeInput" type="LineEdit" parent="LockPanel"]
+[node name="Button-1" type="Button" parent="LockPanel" unique_id=877090260]
 layout_mode = 0
-offset_left = 14.0
-offset_top = 331.0
-offset_right = 486.0
-offset_bottom = 381.0
-placeholder_text = "____"
+offset_left = 22.0
+offset_top = 117.0
+offset_right = 169.0
+offset_bottom = 222.0
+theme_override_font_sizes/font_size = 47
+text = "1"
 
-[node name="SubmitButton" type="Button" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -94.0
-offset_top = 148.0
-offset_right = 94.0
-offset_bottom = 194.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Unlock"
+[node name="Button-2" type="Button" parent="LockPanel" unique_id=1890280213]
+layout_mode = 0
+offset_left = 177.0
+offset_top = 118.0
+offset_right = 324.0
+offset_bottom = 223.0
+theme_override_font_sizes/font_size = 47
+text = "2"
 
+[node name="Button-3" type="Button" parent="LockPanel" unique_id=1086792887]
+layout_mode = 0
+offset_left = 332.0
+offset_top = 118.0
+offset_right = 479.0
+offset_bottom = 223.0
+theme_override_font_sizes/font_size = 47
+text = "3"
+
+[node name="Button-4" type="Button" parent="LockPanel" unique_id=1418133574]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 231.0
+offset_right = 169.0
+offset_bottom = 336.0
+theme_override_font_sizes/font_size = 47
+text = "4"
+
+[node name="Button-5" type="Button" parent="LockPanel" unique_id=93522205]
+layout_mode = 0
+offset_left = 177.0
+offset_top = 232.0
+offset_right = 324.0
+offset_bottom = 337.0
+theme_override_font_sizes/font_size = 47
+text = "5"
+
+[node name="Button-6" type="Button" parent="LockPanel" unique_id=2015747951]
+layout_mode = 0
+offset_left = 332.0
+offset_top = 232.0
+offset_right = 479.0
+offset_bottom = 337.0
+theme_override_font_sizes/font_size = 47
+text = "6"
+
+[node name="Button-7" type="Button" parent="LockPanel" unique_id=22646347]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 345.0
+offset_right = 169.0
+offset_bottom = 450.0
+theme_override_font_sizes/font_size = 47
+text = "7"
+
+[node name="Button-8" type="Button" parent="LockPanel" unique_id=1906009867]
+layout_mode = 0
+offset_left = 177.0
+offset_top = 346.0
+offset_right = 324.0
+offset_bottom = 451.0
+theme_override_font_sizes/font_size = 47
+text = "8"
+
+[node name="Button-9" type="Button" parent="LockPanel" unique_id=1325841574]
+layout_mode = 0
+offset_left = 332.0
+offset_top = 346.0
+offset_right = 479.0
+offset_bottom = 451.0
+theme_override_font_sizes/font_size = 47
+text = "9"
+
+[node name="Button-10" type="Button" parent="LockPanel" unique_id=1933655651]
+layout_mode = 0
+offset_left = 24.0
+offset_top = 457.0
+offset_right = 171.0
+offset_bottom = 562.0
+theme_override_font_sizes/font_size = 47
+text = "0"
+
+[node name="DisplayLabel" type="Label" parent="LockPanel" unique_id=1164021338]
+layout_mode = 0
+offset_left = 23.0
+offset_top = 20.0
+offset_right = 478.0
+offset_bottom = 107.0
+theme_override_font_sizes/font_size = 55
+theme_override_styles/normal = SubResource("StyleBoxFlat_7p2nx")
+theme_override_styles/focus = SubResource("StyleBoxFlat_du0xv")
+text = "Hello"
+vertical_alignment = 1
