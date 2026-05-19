@@ -25,4 +25,11 @@ public sealed class BTBlackboard
 	{
 		return TryGet<T>(key, out T value) ? value : fallback;
 	}
+
+	public T Get<T>(string key)
+	{
+		if (_data.TryGetValue(key, out var raw) && raw is T typed)
+			return typed;
+		return default;
+	}
 }

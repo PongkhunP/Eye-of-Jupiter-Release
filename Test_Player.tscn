@@ -1,0 +1,83 @@
+[gd_scene format=3 uid="uid://b8xarj0a2khyk"]
+
+[ext_resource type="Script" uid="uid://dy0wdxrgiun3u" path="res://Script/PlayerController.cs" id="1_ep03x"]
+[ext_resource type="Script" uid="uid://dx0h3gt485jhb" path="res://Script/PlayerStatManager.cs" id="1_erwsd"]
+[ext_resource type="Texture2D" uid="uid://dx8o0nhef4fvm" path="res://Asset/Character/Main Character/Lean_Forward_Right.tres" id="2_ep03x"]
+[ext_resource type="Texture2D" uid="uid://bq7lvt1ywy2dw" path="res://Asset/Character/Main Character/Lean_Forward_Left.tres" id="3_lo1an"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3ntnd"]
+size = Vector2(37, 45)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jav52"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"idle_down",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_ep03x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_lo1an")
+}],
+"loop": true,
+"name": &"walk_down",
+"speed": 3.5
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk_right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk_up",
+"speed": 5.0
+}]
+
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=1696954300]
+collision_layer = 7
+collision_mask = 7
+motion_mode = 1
+slide_on_ceiling = false
+platform_floor_layers = 0
+script = ExtResource("1_ep03x")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1719577118]
+position = Vector2(38, 31)
+zoom = Vector2(3, 3)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=580804674]
+position = Vector2(59.5, 60.5)
+shape = SubResource("RectangleShape2D_3ntnd")
+
+[node name="PlayerStat" type="Node" parent="." unique_id=129050309]
+script = ExtResource("1_erwsd")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2107151362]
+position = Vector2(59, 60.999992)
+scale = Vector2(0.15767044, 0.15767044)
+sprite_frames = SubResource("SpriteFrames_jav52")
+animation = &"walk_down"

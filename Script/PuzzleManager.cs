@@ -14,7 +14,7 @@ public partial class PuzzleManager : Node
 
 	public const int DefaultTrialsRequired = 3;
 	public const string RiddleDataPath = "res://Data/riddles.json";
-	public const string PuzzleUiScenePath = "res://UI/PuzzleUI.tscn";
+	public const string PuzzleUiScenePath = "res://Scene/UI/PuzzleUI.tscn";
 
 	private PuzzleUI _ui;
 
@@ -85,6 +85,8 @@ public partial class PuzzleManager : Node
 	private int _memoryRound;
 	private string _memoryShrineId;
 
+	private readonly HashSet<string> _usedRiddleIds = new();
+
 
 	// --------------------------------------------------- ----------------------
 	// Godot lifecycle
@@ -99,7 +101,14 @@ public partial class PuzzleManager : Node
 	public override void _Ready()
 	{
 		LoadRiddleData();
+		GetTree().SceneChanged += OnSceneChanged;
 		CallDeferred(nameof(EnsureUi));
+	}
+
+	private void OnSceneChanged()
+	{
+		_ui = null; // clear stale reference
+		CallDeferred(nameof(EnsureUi)); // rebuild in new scene
 	}
 
 	public override void _Process(double delta)
@@ -255,6 +264,8 @@ public partial class PuzzleManager : Node
 			{ "hint",     "What comes next?" }
 		};
 
+		GD.Print($"Are they exists ? payload : {_activePayload != null}, data : {_activePuzzleData != null}");
+
 		BeginPuzzle(PuzzleType.NumberSequence, shrineId, timeOverride);
 	}
 
@@ -264,30 +275,42 @@ public partial class PuzzleManager : Node
 	/// </summary>
 	public void StartRiddlePuzzle(string shrineId, float? timeOverride = null)
 	{
-		if (_riddles.Count == 0)
+		var available = _riddles.FindAll(r => !_usedRiddleIds.Contains(r.Id));
+
+		if (available.Count == 0)
 		{
-			GD.PushWarning($"{nameof(PuzzleManager)}: no riddles loaded.");
-			return;
+			GD.PushWarning("All riddles used — resetting pool");
+			_usedRiddleIds.Clear(); // reset if exhausted
+			available = _riddles;
 		}
 
-		var riddle = _riddles[_rng.Next(_riddles.Count)];
+		var riddle = available[_rng.Next(available.Count)];
+		_usedRiddleIds.Add(riddle.Id); // mark as used
 
 		var acceptedArr = new Godot.Collections.Array();
 		foreach (var a in riddle.Answers) acceptedArr.Add(a);
 
 		_activePayload = new Godot.Collections.Dictionary
-		{
-			{ "shrine_id", shrineId    },
-			{ "answers",   acceptedArr }
-		};
+	{
+		{ "shrine_id", shrineId    },
+		{ "answers",   acceptedArr },
+		{ "riddle_id", riddle.Id   } // store for tracking
+    };
 
 		_activePuzzleData = new Godot.Collections.Dictionary
-		{
-			{ "question", riddle.Question   },
-			{ "hint",     "Answer in words" }
-		};
+	{
+		{ "question", riddle.Question   },
+		{ "hint",     "Answer in words" },
+		{ "riddle_id", riddle.Id        }
+	};
 
 		BeginPuzzle(PuzzleType.ZeusRiddle, shrineId, timeOverride);
+	}
+
+	public void UnregisterTrial(string shrineId)
+	{
+		_completedShrines.Remove(shrineId);
+		GD.Print($"[PuzzleManager] Reset shrine: {shrineId}");
 	}
 	/// <summary>
 	/// Generates a full 5-step sequence and fires MemorySequenceStarted for round 1.
@@ -338,6 +361,147 @@ public partial class PuzzleManager : Node
 		BeginPuzzle(PuzzleType.OpenTheLock, shrineId, float.PositiveInfinity);
 	}
 
+	public void StartPipePuzzle(string shrineId, int difficulty = 1, float? timeOverride = null)
+	{
+		(int cols, int rows) = difficulty switch
+		{
+			0 => (3, 4),
+			2 => (5, 6),
+			_ => (4, 5),
+		};
+
+		var (types, correct, isEmpty, start, end) = GeneratePipeGrid(cols, rows);
+
+		var typesArr = new Godot.Collections.Array();
+		var correctArr = new Godot.Collections.Array();
+		var emptyArr = new Godot.Collections.Array();
+
+		foreach (int t in types) typesArr.Add(t);
+		foreach (int r in correct) correctArr.Add(r);
+		foreach (bool e in isEmpty) emptyArr.Add(e);
+
+		_activePuzzleData = new Godot.Collections.Dictionary
+		{
+			{ "cols",    cols       },
+			{ "rows",    rows       },
+			{ "types",   typesArr   },
+			{ "correct", correctArr },
+			{ "empty",   emptyArr   },  // true = blank tile, no pipe
+            { "start",   start      },
+			{ "end",     end        },
+			{ "hint",    "Connect the pipes from green to orange!" },
+			{ "question","Pipe Puzzle" },
+		};
+
+		_activePayload = new Godot.Collections.Dictionary
+		{
+			{ "shrine_id", shrineId },
+			{ "answer",    "solved" },
+		};
+
+		BeginPuzzle(PuzzleType.PipePuzzle, shrineId, float.PositiveInfinity);
+	}
+
+	// Inside PuzzleManager.cs
+
+	public void StartPlanRoutePuzzle(string shrineId, int obstacleCount = 8, float? timeOverride = null)
+	{
+		Vector2 startNorm = new Vector2(
+			(float)_rng.NextDouble() * 0.08f + 0.04f,   // x: 4%–12%
+			(float)_rng.NextDouble() * 0.55f + 0.22f    // y: 22%–77%
+		);
+		Vector2 endNorm = new Vector2(
+			(float)_rng.NextDouble() * 0.08f + 0.88f,   // x: 88%–96%
+			(float)_rng.NextDouble() * 0.55f + 0.22f    // y: 22%–77%
+		);
+
+		var asteroids = new Godot.Collections.Array();
+		float minDist = 0.10f; // min distance from start/end
+		float minSelf = 0.07f; // min distance between asteroids
+
+		// --- Anchor-based scatter ---
+		// Split the middle of the play area into anchor zones
+		int clusterCount = (int)(obstacleCount * 0.6f); // 60% in clusters
+		int loneCount = obstacleCount - clusterCount; // 40% scattered freely
+		int anchors = Mathf.Max(2, clusterCount / 3);
+
+		var anchorPoints = new List<Vector2>();
+		for (int a = 0; a < anchors; a++)
+		{
+			// Spread anchors evenly across x, random y
+			float ax = 0.20f + (0.60f / (anchors - 1 + 0.001f)) * a
+					   + (float)(_rng.NextDouble() * 0.08f - 0.04f);
+			float ay = (float)_rng.NextDouble() * 0.60f + 0.20f;
+			anchorPoints.Add(new Vector2(Mathf.Clamp(ax, 0.15f, 0.85f), Mathf.Clamp(ay, 0.10f, 0.90f)));
+		}
+
+		// Place clustered asteroids near anchors
+		int placed = 0;
+		foreach (var anchor in anchorPoints)
+		{
+			int perCluster = clusterCount / anchors + (_rng.Next(2) == 0 ? 1 : 0);
+			for (int i = 0; i < perCluster && placed < clusterCount; i++)
+			{
+				TryPlaceAsteroid(
+					asteroids,
+					anchor + RandomOffset(0.04f, 0.14f),
+					startNorm, endNorm, minDist, minSelf, ref placed);
+			}
+		}
+
+		// Place lone scattered asteroids across the full field
+		for (int i = 0; i < loneCount; i++)
+		{
+			Vector2 pos = new Vector2(
+				(float)_rng.NextDouble() * 0.70f + 0.15f,
+				(float)_rng.NextDouble() * 0.75f + 0.12f);
+			TryPlaceAsteroid(asteroids, pos, startNorm, endNorm, minDist, minSelf, ref placed);
+		}
+
+		_activePuzzleData = new Godot.Collections.Dictionary
+		{
+			{ "start_pos", startNorm },
+			{ "end_pos",   endNorm   },
+			{ "asteroids", asteroids },
+			{ "hint",      "Plan a route from Start to End — avoid the asteroids!" },
+			{ "question",  "Plan the Route" },
+		};
+
+		_activePayload = new Godot.Collections.Dictionary
+		{
+			{ "shrine_id", shrineId },
+			{ "answer",    "solved" },
+		};
+
+		BeginPuzzle(PuzzleType.PlanRoute, shrineId, float.PositiveInfinity);
+	}
+
+	private void TryPlaceAsteroid(
+		Godot.Collections.Array asteroids,
+		Vector2 candidate,
+		Vector2 start, Vector2 end,
+		float minDistFromEndpoints,
+		float minDistFromSelf,
+		ref int placed)
+	{
+		candidate = candidate.Clamp(new Vector2(0.10f, 0.08f), new Vector2(0.90f, 0.92f));
+
+		if (candidate.DistanceTo(start) < minDistFromEndpoints) return;
+		if (candidate.DistanceTo(end) < minDistFromEndpoints) return;
+
+		foreach (var existing in asteroids)
+			if (candidate.DistanceTo(existing.AsVector2()) < minDistFromSelf) return;
+
+		asteroids.Add(candidate);
+		placed++;
+	}
+
+	private Vector2 RandomOffset(float minRadius, float maxRadius)
+	{
+		float angle = (float)(_rng.NextDouble() * Mathf.Tau);
+		float dist = (float)(_rng.NextDouble() * (maxRadius - minRadius) + minRadius);
+		return new Vector2(Mathf.Cos(angle) * dist, Mathf.Sin(angle) * dist);
+	}
 	/// <summary>Legacy entry point — kept for backward compatibility.</summary>
 	public void StartPuzzle(PuzzleType type, Godot.Collections.Dictionary payload)
 	{
@@ -350,10 +514,8 @@ public partial class PuzzleManager : Node
 			case PuzzleType.ZeusRiddle: StartRiddlePuzzle(shrineId); break;
 			case PuzzleType.MemoryPuzzle: StartMemoryPuzzle(shrineId); break;
 			case PuzzleType.OpenTheLock: StartOpenLockPuzzle(shrineId); break;
-			case PuzzleType.PipePuzzle:
-			case PuzzleType.PlanRoute:
-				GD.PushWarning($"{nameof(PuzzleManager)}: {type} not implemented yet.");
-				break;
+			case PuzzleType.PipePuzzle: StartPipePuzzle(shrineId); break;
+			case PuzzleType.PlanRoute: StartPlanRoutePuzzle(shrineId); break;
 		}
 	}
 
@@ -380,6 +542,8 @@ public partial class PuzzleManager : Node
 			PuzzleType.NumberSequence => ValidateSequence(answer),
 			PuzzleType.ZeusRiddle => ValidateRiddle(answer),
 			PuzzleType.OpenTheLock => ValidateOpenLock(answer),
+			PuzzleType.PipePuzzle => ValidatePipe(answer),
+			PuzzleType.PlanRoute => ValidatePlanRoute(answer),
 			_ => false
 		};
 
@@ -426,6 +590,7 @@ public partial class PuzzleManager : Node
 	{
 		_activeType = type;
 		_activeShrineId = shrineId;
+		GD.Print($"[Server] : activeType : {_activeType}, Id : {_activeShrineId}");
 		StartTimer(timeOverride ?? PuzzleTimeLimit);
 		EmitSignal(SignalName.PuzzleStarted, (int)type, _activePuzzleData);
 	}
@@ -495,6 +660,179 @@ public partial class PuzzleManager : Node
 				}
 		}
 	}
+
+	//Pipe generator
+	private static readonly int[] _DR = { -1, 0, 1, 0 };
+	private static readonly int[] _DC = { 0, 1, 0, -1 };
+
+	private (int[] types, int[] correct, bool[] isEmpty, int start, int end)
+		GeneratePipeGrid(int cols, int rows)
+	{
+		int total = cols * rows;
+		int[] types = new int[total];
+		int[] correct = new int[total];
+		bool[] isEmpty = new bool[total];
+
+		// All cells start empty
+		for (int i = 0; i < total; i++) isEmpty[i] = true;
+
+		int startCol = _rng.Next(cols);
+		int endCol = _rng.Next(cols);
+		int startIdx = startCol;                     // top row
+		int endIdx = (rows - 1) * cols + endCol;  // bottom row
+
+		var path = CarvePath(cols, rows, startIdx, endIdx);
+
+		// Only path cells get pipes
+		foreach (int idx in path) isEmpty[idx] = false;
+
+		AssignPathPipes(path, cols, rows, types, correct);
+
+		return (types, correct, isEmpty, startIdx, endIdx);
+	}
+
+	private List<int> CarvePath(int cols, int rows, int startIdx, int endIdx)
+	{
+		const int maxAttempts = 200;
+
+		for (int attempt = 0; attempt < maxAttempts; attempt++)
+		{
+			var path = new List<int> { startIdx };
+			var visited = new HashSet<int> { startIdx };
+			int cur = startIdx;
+
+			for (int step = 0; step < cols * rows * 3; step++)
+			{
+				if (cur == endIdx) return path;
+
+				int curRow = cur / cols;
+				int curCol = cur % cols;
+				int endRow = endIdx / cols;
+
+				var candidates = new List<(int idx, int weight)>();
+
+				void TryAdd(int dr, int dc)
+				{
+					int nr = curRow + dr, nc = curCol + dc;
+					if (nr < 0 || nr >= rows || nc < 0 || nc >= cols) return;
+					int ni = nr * cols + nc;
+					if (visited.Contains(ni)) return;
+					// Bias toward the destination row
+					int weight = (dr > 0 && endRow > curRow) || (dr < 0 && endRow < curRow) ? 4 : 1;
+					candidates.Add((ni, weight));
+				}
+
+				TryAdd(-1, 0);
+				TryAdd(0, 1);
+				TryAdd(1, 0);
+				TryAdd(0, -1);
+
+				if (candidates.Count == 0) break; // dead end, retry
+
+				int totalWeight = 0;
+				foreach (var (_, w) in candidates) totalWeight += w;
+				int roll = _rng.Next(totalWeight);
+				int acc = 0;
+				int next = candidates[0].idx;
+				foreach (var (ni, w) in candidates)
+				{
+					acc += w;
+					if (roll < acc) { next = ni; break; }
+				}
+
+				path.Add(next);
+				visited.Add(next);
+				cur = next;
+			}
+		}
+
+		return FallbackPath(cols, rows, startIdx, endIdx);
+	}
+
+	private List<int> FallbackPath(int cols, int rows, int startIdx, int endIdx)
+	{
+		var path = new List<int>();
+		int col = startIdx % cols;
+		for (int r = 0; r < rows; r++)
+			path.Add(r * cols + col);
+
+		int endCol = endIdx % cols;
+		int lastRow = rows - 1;
+		if (col != endCol)
+		{
+			int step = col < endCol ? 1 : -1;
+			for (int c = col + step; c != endCol + step; c += step)
+				path.Add(lastRow * cols + c);
+		}
+		return path;
+	}
+
+	private void AssignPathPipes(
+		List<int> path, int cols, int rows,
+		int[] types, int[] correct)
+	{
+		for (int i = 0; i < path.Count; i++)
+		{
+			int idx = path[i];
+			int row = idx / cols;
+			int col = idx % cols;
+
+			var openDirs = new List<int>();
+
+			if (i > 0)
+			{
+				int prev = path[i - 1];
+				int pr = prev / cols, pc = prev % cols;
+				for (int d = 0; d < 4; d++)
+					if (row + _DR[d] == pr && col + _DC[d] == pc)
+						openDirs.Add(d);
+			}
+			if (i < path.Count - 1)
+			{
+				int next = path[i + 1];
+				int nr = next / cols, nc = next % cols;
+				for (int d = 0; d < 4; d++)
+					if (row + _DR[d] == nr && col + _DC[d] == nc)
+						openDirs.Add(d);
+			}
+
+			(types[idx], correct[idx]) = openDirs.Count switch
+			{
+				1 => CapConfig(openDirs[0]),
+				2 => TwoOpeningConfig(openDirs[0], openDirs[1]),
+				3 => TConfig(openDirs),
+				_ => ((int)PipeType.Cross, 0),
+			};
+		}
+	}
+
+	private static (int type, int rot) TwoOpeningConfig(int a, int b)
+	{
+		if ((a == 0 && b == 2) || (a == 2 && b == 0))
+			return ((int)PipeType.Straight, 0);
+		if ((a == 1 && b == 3) || (a == 3 && b == 1))
+			return ((int)PipeType.Straight, 1);
+
+		for (int rot = 0; rot < 4; rot++)
+		{
+			int ra = (1 + rot) % 4;
+			int rb = (2 + rot) % 4;
+			if ((ra == a && rb == b) || (ra == b && rb == a))
+				return ((int)PipeType.Elbow, rot);
+		}
+		return ((int)PipeType.Elbow, 0);
+	}
+
+	private static (int type, int rot) TConfig(List<int> dirs)
+	{
+		for (int d = 0; d < 4; d++)
+			if (!dirs.Contains(d))
+				return ((int)PipeType.T, (d + 4) % 4);
+		return ((int)PipeType.T, 0);
+	}
+
+	private static (int type, int rot) CapConfig(int openDir)
+		=> ((int)PipeType.Cap, (openDir - 2 + 4) % 4);
 
 	// -------------------------------------------------------------------------
 	// Sequence generator
@@ -667,6 +1005,12 @@ public partial class PuzzleManager : Node
 
 		return input == expected;
 	}
+
+	private bool ValidatePipe(Variant answer)
+		=> answer.AsString().Trim().ToLowerInvariant() == "solved";
+
+	private bool ValidatePlanRoute(Variant answer)
+		=> answer.AsString().Trim().ToLowerInvariant() == "solved";
 
 	private static double ToDouble(Variant v)
 	{

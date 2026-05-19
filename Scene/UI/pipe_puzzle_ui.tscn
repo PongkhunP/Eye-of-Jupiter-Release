@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://btxujs1fthsng"]
+
+[ext_resource type="Script" uid="uid://bxrj43vt2gelq" path="res://Script/PipePuzzleSection.cs" id="1_0gx3m"]
+[ext_resource type="Texture2D" uid="uid://decj03a70hes2" path="res://Asset/UI/close-button-removebg-preview.png" id="2_swn2k"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_trax2"]
+bg_color = Color(0.91764385, 0.91764385, 0.91764385, 0)
+
+[node name="PipePuzzleUI" type="Control" unique_id=578871889 node_paths=PackedStringArray("_feedbackLabel", "_closeButton", "_grid", "_hintLabel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0gx3m")
+_feedbackLabel = NodePath("PipePanel/FeedbackLabel")
+_closeButton = NodePath("PipePanel/Closebutton")
+_grid = NodePath("PipePanel/GridContainer")
+_hintLabel = NodePath("PipePanel/HintLabel")
+
+[node name="PipePanel" type="Panel" parent="." unique_id=867887893]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -251.0
+offset_top = -262.0
+offset_right = 251.0
+offset_bottom = 138.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HintLabel" type="Label" parent="PipePanel" unique_id=1953723024]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 413.0
+offset_right = 491.0
+offset_bottom = 451.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FeedbackLabel" type="Label" parent="PipePanel" unique_id=873875638]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -225.0
+offset_top = 10.0
+offset_right = 225.0
+offset_bottom = 33.0
+grow_horizontal = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="PipePanel" unique_id=184168710]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 40.0
+offset_bottom = -66.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 3
+
+[node name="Closebutton" type="Button" parent="PipePanel" unique_id=751525814]
+layout_mode = 0
+offset_left = 492.0
+offset_top = -58.0
+offset_right = 548.0
+offset_bottom = -1.0
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_trax2")
+icon = ExtResource("2_swn2k")

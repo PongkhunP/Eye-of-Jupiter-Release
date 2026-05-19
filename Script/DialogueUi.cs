@@ -15,7 +15,7 @@ public partial class DialogueUi : Control
 		HideDialogue();
 	}
 
-	public void ShowLine(string text, string hint = "E — continue")
+	public void ShowLine(string text, string hint = "Space — continue")
 	{
 		_body.Text = text;
 		_hint.Text = hint;

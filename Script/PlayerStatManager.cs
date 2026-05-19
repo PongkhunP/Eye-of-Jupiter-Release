@@ -9,8 +9,7 @@ public partial class PlayerStatManager : Node
 	[Export] public float MaxO2 { get; set; } = 100f;
 	[Export] public float MaxHp { get; set; } = 100f;
 
-	/// <summary>Baseline O2 drain in the Jupiter atmosphere (units / second).</summary>
-	[Export] public float BaseO2DrainPerSecond { get; set; } = 2f;
+	[Export] public float BaseO2DrainPerSecond { get; set; } = 0.5f;
 
 	// ── State ─────────────────────────────────────────────────────────────────
 
@@ -46,6 +45,12 @@ public partial class PlayerStatManager : Node
 		EmitO2IfChanged();
 		EmitHpIfChanged();
 	}
+
+    public override void _Process(double delta)
+    {
+        // GD.Print($"Player HP : {Hp}");
+    }
+
 
 	public void Tick(float delta, float extraO2Drain = 0f, float extraHpDrain = 0f)
 	{
@@ -117,6 +122,7 @@ public partial class PlayerStatManager : Node
 		if (float.IsNaN(_lastEmittedO2) || Mathf.Abs(_lastEmittedO2 - O2) > 0.001f)
 		{
 			_lastEmittedO2 = O2;
+			// GD.Print($"Last emitted O2 : {_lastEmittedO2}");
 			EmitSignal(SignalName.O2Changed, O2, MaxO2);
 		}
 	}

@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://286l8fppwn0j"]
+
+[ext_resource type="Script" uid="uid://c0lj3mif0ycvv" path="res://Script/UI/HeartDisplay.cs" id="1_yre0w"]
+[ext_resource type="Texture2D" uid="uid://yddi71jpkva" path="res://Asset/UI/Heart-Icon.png" id="2_rt3mq"]
+[ext_resource type="Texture2D" uid="uid://bownlepp1p7k7" path="res://Asset/UI/Heart-Icon-Empty.png" id="3_ceu65"]
+
+[node name="PlayerInGameUI" type="Control" unique_id=1346618508]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1559636303]
+layout_mode = 0
+offset_right = 641.0
+offset_bottom = 72.0
+script = ExtResource("1_yre0w")
+FullHeart = ExtResource("2_rt3mq")
+EmptyHeart = ExtResource("3_ceu65")
+
+[node name="Label" type="Label" parent="." unique_id=1716346467]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 11.0
+offset_right = 95.0
+offset_bottom = 34.0
+text = "Hello world"

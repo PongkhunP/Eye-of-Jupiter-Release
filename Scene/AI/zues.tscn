@@ -1,0 +1,81 @@
+[gd_scene format=3 uid="uid://cxx3o6ccydwen"]
+
+[ext_resource type="Script" uid="uid://denh2x4okx6u1" path="res://Script/AI/ZuesAI/ZeusBrain.cs" id="1_gkoef"]
+[ext_resource type="Texture2D" uid="uid://b8slb65mf1x8p" path="res://Asset/Character/Olympian/Zeus_idle_breathing.png" id="2_cwyjx"]
+[ext_resource type="Script" uid="uid://cxafs6731alep" path="res://Script/AI/ZuesAI/ZeusBodyController.cs" id="3_8qctg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8qctg"]
+size = Vector2(53, 77.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bkyde"]
+size = Vector2(53, 77.5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ficlc"]
+atlas = ExtResource("2_cwyjx")
+region = Rect2(0, 0, 352, 768)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_62j85"]
+atlas = ExtResource("2_cwyjx")
+region = Rect2(352, 0, 352, 768)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gk5e2"]
+atlas = ExtResource("2_cwyjx")
+region = Rect2(704, 0, 352, 768)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p7c1c"]
+atlas = ExtResource("2_cwyjx")
+region = Rect2(1056, 0, 352, 768)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_8tgj7"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ficlc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_62j85")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gk5e2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p7c1c")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 6.0
+}]
+
+[node name="Zues" type="Node2D" unique_id=1857402621 node_paths=PackedStringArray("brain", "_sprite") groups=["zeus"]]
+script = ExtResource("3_8qctg")
+MoveSpeed = 120.0
+StopThreshold = 20.0
+brain = NodePath("ZuesBrain")
+_sprite = NodePath("AnimatedSprite2D")
+
+[node name="InteractArea" type="Area2D" parent="." unique_id=129958857]
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractArea" unique_id=1490921995]
+position = Vector2(39.5, 58.25)
+shape = SubResource("RectangleShape2D_8qctg")
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=204304564]
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=2003772422]
+position = Vector2(39.5, 58.25)
+shape = SubResource("RectangleShape2D_bkyde")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=968201641]
+position = Vector2(40.000004, 61.000004)
+scale = Vector2(0.14204545, 0.14204545)
+sprite_frames = SubResource("SpriteFrames_8tgj7")
+animation = &"idle"
+frame_progress = 0.12806223
+
+[node name="ZuesBrain" type="Node2D" parent="." unique_id=786322132 node_paths=PackedStringArray("interactArea", "zeusBody", "zeusBodyController")]
+script = ExtResource("1_gkoef")
+interactArea = NodePath("../InteractArea")
+zeusBody = NodePath("..")
+zeusBodyController = NodePath("..")

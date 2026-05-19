@@ -7,8 +7,9 @@ public partial class PuzzleUI : Control
 	[Export] private Control _mathSection;
 	[Export] private Control _riddleSection;
 	[Export] private Control _memorySection;
-
 	[Export] private Control _lockSection;
+	[Export] private Control _pipeSection;
+	[Export] private Control _planRouteSection;
 
 	// ---- timer bar (shared, lives on PuzzleUI root level) -------------------
 	[Export] private ProgressBar _timerBar;   // or ProgressBar
@@ -61,6 +62,8 @@ public partial class PuzzleUI : Control
 		string question = data.ContainsKey("question") ? data["question"].AsString() : "";
 		string hint = data.ContainsKey("hint") ? data["hint"].AsString() : "";
 
+		GD.Print("Start the puzzle From UI");
+
 		switch ((PuzzleType)puzzleType)
 		{
 			case PuzzleType.Math:
@@ -82,6 +85,16 @@ public partial class PuzzleUI : Control
 				if (_lockSection is LockPuzzleSection lockSection)
 					lockSection.Populate(question, hint, digits);
 				_lockSection.Visible = true;
+				break;
+			case PuzzleType.PipePuzzle:
+				if (_pipeSection is PipePuzzleSection pipe)
+					pipe.Populate(data);
+				_pipeSection.Visible = true;
+				break;
+			case PuzzleType.PlanRoute:
+				if (_planRouteSection is PlanRouteSection route)
+					route.Populate(data);
+				_planRouteSection.Visible = true;
 				break;
 		}
 
@@ -152,5 +165,7 @@ public partial class PuzzleUI : Control
 		if (_riddleSection != null) _riddleSection.Visible = false;
 		if (_memorySection != null) _memorySection.Visible = false;
 		if (_lockSection != null) _lockSection.Visible = false;
+		if (_pipeSection != null) _pipeSection.Visible = false;
+		if (_planRouteSection != null) _planRouteSection.Visible = false;
 	}
 }

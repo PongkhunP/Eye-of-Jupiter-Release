@@ -1,0 +1,109 @@
+[gd_scene format=3 uid="uid://g5iwai7avsc"]
+
+[ext_resource type="Script" uid="uid://qq7rji10q1x0" path="res://Script/UI/PuzzleUI.cs" id="1_p5jmq"]
+[ext_resource type="PackedScene" uid="uid://c70ygglftnbbx" path="res://Scene/UI/math_puzzle.tscn" id="2_ahs4d"]
+[ext_resource type="PackedScene" uid="uid://c3golinita4cm" path="res://Scene/UI/riddle_puzzle.tscn" id="3_p5jmq"]
+[ext_resource type="PackedScene" uid="uid://b6ojv22qmb30p" path="res://Scene/UI/memory_puzzle.tscn" id="4_tl448"]
+[ext_resource type="PackedScene" uid="uid://dn8ptyiob50t1" path="res://Scene/UI/lock_puzzle.tscn" id="5_locksec"]
+[ext_resource type="PackedScene" uid="uid://btxujs1fthsng" path="res://Scene/UI/pipe_puzzle_ui.tscn" id="6_u5hsa"]
+[ext_resource type="PackedScene" uid="uid://cj7xhijxpexek" path="res://Scene/UI/plan_route.tscn" id="7_defi4"]
+
+[node name="PuzzleUI" type="Control" unique_id=852471946 node_paths=PackedStringArray("_mathSection", "_riddleSection", "_memorySection", "_lockSection", "_pipeSection", "_planRouteSection", "_timerBar", "_timerLabel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_p5jmq")
+_mathSection = NodePath("Panel/MathPuzzle")
+_riddleSection = NodePath("Panel/RiddlePuzzle")
+_memorySection = NodePath("Panel/MemoryPuzzle")
+_lockSection = NodePath("Panel/LockPuzzle")
+_pipeSection = NodePath("Panel/PipePuzzleUI")
+_planRouteSection = NodePath("Panel/PlanRoute")
+_timerBar = NodePath("Panel/Timebar")
+_timerLabel = NodePath("Panel/TimeLabel")
+
+[node name="Panel" type="Panel" parent="." unique_id=1267182845]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -275.0
+offset_top = -285.5
+offset_right = 275.0
+offset_bottom = 324.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1296205043]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="MathPuzzle" parent="Panel" unique_id=515218658 instance=ExtResource("2_ahs4d")]
+visible = false
+layout_mode = 1
+
+[node name="RiddlePuzzle" parent="Panel" unique_id=978597227 instance=ExtResource("3_p5jmq")]
+visible = false
+layout_mode = 1
+offset_top = -0.5
+offset_bottom = -0.5
+
+[node name="MemoryPuzzle" parent="Panel" unique_id=364935116 instance=ExtResource("4_tl448")]
+visible = false
+layout_mode = 1
+
+[node name="LockPuzzle" parent="Panel" unique_id=1874420738 instance=ExtResource("5_locksec")]
+visible = false
+layout_mode = 1
+
+[node name="PipePuzzleUI" parent="Panel" unique_id=578871889 instance=ExtResource("6_u5hsa")]
+visible = false
+layout_mode = 1
+
+[node name="PlanRoute" parent="Panel" unique_id=1262990504 instance=ExtResource("7_defi4")]
+visible = false
+layout_mode = 1
+
+[node name="Timebar" type="ProgressBar" parent="Panel" unique_id=933316731]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -251.0
+offset_top = -26.5
+offset_right = 260.0
+offset_bottom = -12.5
+grow_horizontal = 2
+grow_vertical = 0
+show_percentage = false
+
+[node name="TimeLabel" type="Label" parent="Panel" unique_id=325480846]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -101.0
+offset_top = -56.5
+offset_right = 83.0
+offset_bottom = -33.5
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_alignment = 1
+vertical_alignment = 1

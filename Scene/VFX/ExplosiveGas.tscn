@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://d4fquehwi23l5"]
+
+[ext_resource type="Texture2D" uid="uid://b77i5xbms8xvd" path="res://Asset/Hazard/Explosion_gas/Explosion_gas1.png" id="1_mjd8l"]
+[ext_resource type="Texture2D" uid="uid://cg7rm5q5tvfbm" path="res://Asset/Hazard/Explosion_gas/Explosion_gas2.png" id="2_ftn0w"]
+[ext_resource type="Texture2D" uid="uid://k48400gu2m72" path="res://Asset/Hazard/Explosion_gas/Explosion_gas3.png" id="3_mmnek"]
+[ext_resource type="Texture2D" uid="uid://bkk06altns3fg" path="res://Asset/Hazard/Explosion_gas/Explosion_gas4.png" id="4_ba07n"]
+[ext_resource type="Texture2D" uid="uid://bovtrytj4jywo" path="res://Asset/Hazard/Explosion_gas/Explosion_gas5.png" id="5_7gjsp"]
+[ext_resource type="Texture2D" uid="uid://htheipxqj7rd" path="res://Asset/Hazard/Explosion_gas/Explosion_gas6.png" id="6_13hjv"]
+[ext_resource type="Texture2D" uid="uid://072hksw5qes1" path="res://Asset/Hazard/Explosion_gas/Explosion_gas7.png" id="7_3kwkw"]
+[ext_resource type="Texture2D" uid="uid://ccdcqmkdla0bp" path="res://Asset/Hazard/Explosion_gas/Explosion_gas8.png" id="8_omojv"]
+[ext_resource type="Texture2D" uid="uid://daqr6lufed5fo" path="res://Asset/Hazard/Explosion_gas/Explosion_gas9.png" id="9_7476p"]
+[ext_resource type="Texture2D" uid="uid://7fkqpcmsxt74" path="res://Asset/Hazard/Explosion_gas/Explosion_gas10.png" id="10_y82ew"]
+[ext_resource type="Script" uid="uid://dw182d1m7pg2l" path="res://Scene/VFX/GasHazardEffect.cs" id="11_s0x6g"]
+[ext_resource type="Script" uid="uid://d4h2kak1l6m3n" path="res://Script/HazardZone.cs" id="12_l0kia"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ejxp3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_mjd8l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_ftn0w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_mmnek")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_ba07n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_7gjsp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_13hjv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_3kwkw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_omojv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_7476p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_y82ew")
+}],
+"loop": true,
+"name": &"Play",
+"speed": 15.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mtpes"]
+radius = 90.02222
+
+[node name="ExplosiveGas" type="AnimatedSprite2D" unique_id=1727152086]
+position = Vector2(64.25, 63.25)
+scale = Vector2(0.49023438, 0.49023438)
+sprite_frames = SubResource("SpriteFrames_ejxp3")
+animation = &"Play"
+frame_progress = 0.65736043
+script = ExtResource("11_s0x6g")
+HpDrain = 5.0
+
+[node name="HazardZone" type="Area2D" parent="." unique_id=1908378000]
+collision_layer = 2
+collision_mask = 4
+script = ExtResource("12_l0kia")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HazardZone" unique_id=2101969191]
+shape = SubResource("CircleShape2D_mtpes")

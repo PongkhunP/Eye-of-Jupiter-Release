@@ -1,9 +1,10 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 
 public partial class DialogueManager : Node
 {
-	public const string DialogueUiScenePath = "res://UI/DialogueUI.tscn";
+	public const string DialogueUiScenePath = "res://Scene/UI/DialogueUI.tscn";
 	public const string DialogueDataPath = "res://Data/dialogue.json";
 
 	public static DialogueManager Instance { get; private set; }
@@ -37,7 +38,13 @@ public partial class DialogueManager : Node
 	public override void _Ready()
 	{
 		LoadDialogueData();
+		GetTree().SceneChanged += OnSceneChanged;
 		CallDeferred(nameof(EnsureUi));
+	}
+    private void OnSceneChanged()
+	{
+		_ui = null; // clear stale reference
+		CallDeferred(nameof(EnsureUi)); // rebuild in new scene
 	}
 
 	public override void _Process(double delta)

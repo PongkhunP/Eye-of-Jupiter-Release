@@ -14,7 +14,7 @@ public partial class LockPuzzleSection : Control
 	[Export] private Button _closeButton;
 
 	// Digit buttons: assign Button-1 through Button-9 in the Inspector
-	[Export] private Button[] _digitButtons = new Button[9];
+	[Export] private Button[] _digitButtons = new Button[10];
 
 	private int _digits = 4;
 	private string _currentInput = "";
@@ -27,8 +27,14 @@ public partial class LockPuzzleSection : Control
 
 		for (int i = 0; i < _digitButtons.Length; i++)
 		{
-			int digit = i + 1; // buttons are 1–9
-			if(digit == 10) digit = 0;
+			int digit = (i + 1) % 10;
+
+			if (_digitButtons[i] == null)
+			{
+				GD.Print($"_digitButtons[{i}] is null! Check inspector assignment.");
+				continue;
+			}
+
 			_digitButtons[i].Pressed += () => OnDigitPressed(digit);
 		}
 	}
@@ -60,6 +66,7 @@ public partial class LockPuzzleSection : Control
 			return;
 
 		_currentInput += digit.ToString();
+		GD.Print($"Current input : {_currentInput}");
 		UpdateDisplay();
 	}
 

@@ -1,0 +1,105 @@
+[gd_scene format=3 uid="uid://dcmmdsvh70wd3"]
+
+[ext_resource type="Script" uid="uid://dy0wdxrgiun3u" path="res://Script/PlayerController.cs" id="1_player"]
+[ext_resource type="Script" uid="uid://cjkle5p2k10u3" path="res://Script/CameraController.cs" id="2_xftn7"]
+[ext_resource type="Texture2D" uid="uid://dx8o0nhef4fvm" path="res://Asset/Character/Main Character/Lean_Forward_Right.tres" id="3_u17yo"]
+[ext_resource type="Texture2D" uid="uid://bq7lvt1ywy2dw" path="res://Asset/Character/Main Character/Lean_Forward_Left.tres" id="4_tac38"]
+[ext_resource type="Script" uid="uid://g4tmqpxcisa5" path="res://Script/SceneTransitionManager.cs" id="6_278sj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_drqot"]
+size = Vector2(37, 45)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hz"]
+radius = 41.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ix"]
+radius = 31.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_u17yo"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"idle_down",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"idle_up",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_u17yo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_tac38")
+}],
+"loop": true,
+"name": &"walk_down",
+"speed": 3.5
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk_left",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk_right",
+"speed": 5.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk_up",
+"speed": 5.0
+}]
+
+[node name="Main character" type="CharacterBody2D" unique_id=1315461981 groups=["player"]]
+collision_layer = 4
+collision_mask = 3
+motion_mode = 1
+platform_floor_layers = 0
+script = ExtResource("1_player")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1427249551]
+position = Vector2(59.5, 60.5)
+shape = SubResource("RectangleShape2D_drqot")
+
+[node name="HazardDetector" type="Area2D" parent="." unique_id=280650412]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HazardDetector" unique_id=677743142]
+position = Vector2(58, 60)
+shape = SubResource("CircleShape2D_hz")
+
+[node name="InteractRange" type="Area2D" parent="." unique_id=158683060]
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractRange" unique_id=1848775281]
+position = Vector2(58, 60)
+shape = SubResource("CircleShape2D_ix")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=645238832]
+position = Vector2(59, 60.999992)
+scale = Vector2(0.15767044, 0.15767044)
+sprite_frames = SubResource("SpriteFrames_u17yo")
+animation = &"walk_down"
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1322102785 groups=["camera"]]
+position = Vector2(60, 65)
+zoom = Vector2(3, 3)
+script = ExtResource("2_xftn7")
+ArrowColor = Color(1, 0.08235294, 0.101960786, 0.9019608)
+
+[node name="SceneManager" type="Node" parent="." unique_id=306650702]
+script = ExtResource("6_278sj")

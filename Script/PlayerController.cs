@@ -16,6 +16,7 @@ public partial class PlayerController : CharacterBody2D
 	private Area2D _hazardDetector;
 	private Area2D _interactRange;
 	private AnimatedSprite2D _sprite;
+	private float _stunTimer = 0f;
 
 	public override void _EnterTree() => Instance = this;
 
@@ -28,8 +29,6 @@ public partial class PlayerController : CharacterBody2D
 	public override void _Ready()
 	{
 		MotionMode = MotionModeEnum.Floating;
-		CollisionLayer = 1;
-		CollisionMask = 0;
 
 		_hazardDetector = GetNodeOrNull<Area2D>("HazardDetector");
 		_interactRange = GetNodeOrNull<Area2D>("InteractRange");
@@ -40,9 +39,17 @@ public partial class PlayerController : CharacterBody2D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		if (_stunTimer > 0f)
+		{
+			_stunTimer -= (float)delta;
+			Velocity = Velocity.Lerp(Vector2.Zero, 0.2f);
+			MoveAndSlide();
+			return;
+		}
+		
 		if (PuzzleManager.Instance.IsPuzzleActive) return;
 		if (DialogueManager.Instance.IsDialogueActive) return;
-		
+
 		var stats = PlayerStatManager.Instance;
 		if (stats == null)
 		{
@@ -70,6 +77,23 @@ public partial class PlayerController : CharacterBody2D
 		HandleMovement();
 		TickStats((float)delta, stats);
 		TryInteract();
+
+		for (int i = 0; i < GetSlideCollisionCount(); i++)
+		{
+			var col = GetSlideCollision(i);
+			if (col.GetCollider() is StaticBody2D)
+				Velocity = Velocity.Slide(col.GetNormal());
+		}
+	}
+
+	public void SetStunned(float duration)
+	{
+		_stunTimer = Mathf.Max(_stunTimer, duration);
+	}
+
+	public void ApplyKnockback(Vector2 force)
+	{
+		Velocity += force;
 	}
 
 	// ── Private helpers ───────────────────────────────────────────────────────
@@ -81,6 +105,14 @@ public partial class PlayerController : CharacterBody2D
 			input = input.Normalized();
 		Velocity = input * Speed;
 		MoveAndSlide();
+
+		for (int i = 0; i < GetSlideCollisionCount(); i++)
+		{
+			var col = GetSlideCollision(i);
+			if (col.GetCollider() is StaticBody2D)
+				Velocity = Velocity.Slide(col.GetNormal());
+		}
+
 		UpdateAnimation(input);
 	}
 

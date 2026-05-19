@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://b02g4f0a2h2u4"]
+
+[ext_resource type="Script" uid="uid://cmxiw4e3b65eo" path="res://Script/UI/NoteUI.cs" id="1_dhkm1"]
+[ext_resource type="Texture2D" uid="uid://decj03a70hes2" path="res://Asset/UI/close-button-removebg-preview.png" id="2_bmpyb"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h0blb"]
+bg_color = Color(0.91764385, 0.91764385, 0.91764385, 0)
+
+[node name="NoteUI" type="Control" unique_id=1373777025 node_paths=PackedStringArray("_body", "closeButton")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_right = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_dhkm1")
+_body = NodePath("Panel/VBoxContainer/NoteBody")
+closeButton = NodePath("Panel/VBoxContainer/HBoxContainer/Closebutton")
+
+[node name="Panel" type="Panel" parent="." unique_id=1189697902]
+custom_minimum_size = Vector2(520, 50)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -175.0
+offset_right = 250.0
+offset_bottom = 175.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, 0.6)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=218516669]
+custom_minimum_size = Vector2(501.14, 200)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -214.0
+offset_top = -236.66666
+offset_right = 287.14
+offset_bottom = -17.666656
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1, 1.6666667)
+theme_override_constants/separation = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=727288108]
+custom_minimum_size = Vector2(0.4, 20)
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Closebutton" type="Button" parent="Panel/VBoxContainer/HBoxContainer" unique_id=1237425042]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_h0blb")
+action_mode = 0
+icon = ExtResource("2_bmpyb")
+
+[node name="Note" type="Label" parent="Panel/VBoxContainer" unique_id=1446084772]
+layout_mode = 2
+text = "— Note —"
+
+[node name="NoteBody" type="RichTextLabel" parent="Panel/VBoxContainer" unique_id=698541742]
+custom_minimum_size = Vector2(50, 100)
+layout_mode = 2

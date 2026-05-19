@@ -1,0 +1,110 @@
+[gd_scene format=3 uid="uid://cj7xhijxpexek"]
+
+[ext_resource type="Texture2D" uid="uid://decj03a70hes2" path="res://Asset/UI/close-button-removebg-preview.png" id="1_26brm"]
+[ext_resource type="Script" uid="uid://y6r85lsdnia6" path="res://Script/UI/PlanRouteSection.cs" id="1_k0bxf"]
+[ext_resource type="Texture2D" uid="uid://ddnsjeecce4of" path="res://Asset/Asteriod/Asteroid.png" id="2_6pygc"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k0bxf"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ltpsu"]
+bg_color = Color(0.91764385, 0.91764385, 0.91764385, 0)
+
+[node name="PlanRoute" type="Control" unique_id=1262990504 node_paths=PackedStringArray("_heartLabel", "_hintLabel", "_feedbackLabel", "_closeButton", "_resetButton", "_planRoutePanel", "_fuelBar", "_fuelLabel")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_k0bxf")
+_asteroidTexture = ExtResource("2_6pygc")
+_heartLabel = NodePath("PlanRoutePanel/HeartLabel")
+_hintLabel = NodePath("PlanRoutePanel/HintLabel")
+_feedbackLabel = NodePath("PlanRoutePanel/FeedbackLabel")
+_closeButton = NodePath("PlanRoutePanel/Closebutton")
+_resetButton = NodePath("PlanRoutePanel/ResetButton")
+_planRoutePanel = NodePath("PlanRoutePanel")
+_fuelBar = NodePath("PlanRoutePanel/FuelBar")
+_fuelLabel = NodePath("PlanRoutePanel/FuelLabel")
+
+[node name="PlanRoutePanel" type="Panel" parent="." unique_id=132237507]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -251.0
+offset_top = -262.0
+offset_right = 251.0
+offset_bottom = 138.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_k0bxf")
+
+[node name="HintLabel" type="Label" parent="PlanRoutePanel" unique_id=318295722]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 474.0
+offset_right = 484.0
+offset_bottom = 497.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FuelLabel" type="Label" parent="PlanRoutePanel" unique_id=1253748343]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 402.0
+offset_right = 489.0
+offset_bottom = 425.0
+text = "Fuel"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HeartLabel" type="Label" parent="PlanRoutePanel" unique_id=1185081138]
+layout_mode = 0
+offset_left = 16.0
+offset_top = -49.0
+offset_right = 487.0
+offset_bottom = -11.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="FeedbackLabel" type="Label" parent="PlanRoutePanel" unique_id=740641891]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -225.0
+offset_top = 10.0
+offset_right = 225.0
+offset_bottom = 33.0
+grow_horizontal = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Closebutton" type="Button" parent="PlanRoutePanel" unique_id=673688731]
+layout_mode = 0
+offset_left = 492.0
+offset_top = -58.0
+offset_right = 548.0
+offset_bottom = -1.0
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_ltpsu")
+icon = ExtResource("1_26brm")
+
+[node name="ResetButton" type="Button" parent="PlanRoutePanel" unique_id=941546220]
+layout_mode = 0
+offset_left = 129.0
+offset_top = 509.0
+offset_right = 357.0
+offset_bottom = 550.0
+text = "Reset"
+
+[node name="FuelBar" type="ProgressBar" parent="PlanRoutePanel" unique_id=241278934]
+layout_mode = 0
+offset_left = 13.0
+offset_top = 434.0
+offset_right = 494.0
+offset_bottom = 461.0
